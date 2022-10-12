@@ -9,7 +9,7 @@ main()
     bool repeticion = true;
     while(repeticion == true)
     {
-        system("cls");
+        system("cls"); //Se inicia el primer menu de inicio
         cout<<"SUPERTIENDA MAS+"<<endl<<endl;
         cout<<"Menu Principal"<<endl;
         cout<<"1.) Articulos"<<endl;
