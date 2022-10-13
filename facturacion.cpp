@@ -2,70 +2,100 @@
 #include<stdlib.h>
 #include<math.h>
 #include<windows.h> 
+#include<string>
 using namespace std;
+
+/*Pendientes
+    Hacer que no se puedan ingresar codigos repetidos
+    hacer la parte del provedor para que cuando no concida el codigo del proveedor cree uno nuevo
+*/
+
+int maxArt = 5;
 
 struct art //articulos
 {
     int codigo;
     int codProveedor;
-    string nombre;
+    char nombre[100];
     int cantidadTienda;
     int cantidadBodega;
     float precio;
 
-} articulos[50];
+} articulos[100];
 
 void generarDatos() //Esta Funcion sirve para Generar los datos base, se generaran 5 array por estructura
 {
     //Datos de Articulos
     articulos[1].codigo = 1;
     articulos[1].codProveedor = 200;
-    articulos[1].nombre = "Carne de Res (libra)";
+    strcpy(articulos[1].nombre, "Carne de Res (libra)");
     articulos[1].cantidadTienda = 50;
     articulos[1].cantidadBodega = 140;
     articulos[1].precio = 30.50;
 
     articulos[2].codigo = 2;
     articulos[2].codProveedor = 400;
-    articulos[2].nombre = "Carton de Huevos";
+    strcpy(articulos[2].nombre, "Carton de Huevos");
     articulos[2].cantidadTienda = 30;
     articulos[2].cantidadBodega = 100;
     articulos[2].precio = 30.45;
 
     articulos[3].codigo = 3;
     articulos[3].codProveedor = 400;
-    articulos[3].nombre = "Galon de Leche Lala";
+    strcpy(articulos[3].nombre, "Galon de Leche Lala");
     articulos[3].cantidadTienda = 24;
     articulos[3].cantidadBodega = 39;
     articulos[3].precio = 25.64;
 
     articulos[4].codigo = 4;
     articulos[4].codProveedor = 400;
-    articulos[4].nombre = "Aceite de Cocina";
+    strcpy(articulos[4].nombre, "Aceite de Cocina");
     articulos[4].cantidadTienda = 60;
     articulos[4].cantidadBodega = 200;
     articulos[4].precio = 14.69;
 
     articulos[5].codigo = 5;
     articulos[5].codProveedor = 400;
-    articulos[5].nombre = "Libra de Arroz";
+    strcpy(articulos[5].nombre, "Libra de Arroz");
     articulos[5].cantidadTienda = 49;
     articulos[5].cantidadBodega = 600;
     articulos[5].precio = 5.50;
 }
 
+void mostrarArticulo(int cod)
+{
+    cout<<"Este es el articulo ingresado: "<<endl<<endl;
+    cout<<"Codigo de Producto: "<<articulos[cod].codigo<<endl;
+    cout<<"Codigo de Provedor: "<<articulos[cod].codProveedor<<endl;
+    cout<<"Nombre de Producto: "<<articulos[cod].nombre<<endl;
+    cout<<"Cantidad en Tienda: "<<articulos[cod].cantidadTienda<<endl;
+    cout<<"Cantidad en Bodega: "<<articulos[cod].cantidadBodega<<endl;
+    cout<<"Precio de Producto: "<<articulos[cod].precio<<endl<<endl;
+}
+
 void ingresarArticulos()
 {
+    int cod;
     system("cls");
-    for(int x = 1; x<5; x++)
-    {
-        cout<<articulos[x].codigo<<endl;
-        cout<<articulos[x].codProveedor<<endl;
-        cout<<articulos[x].nombre<<endl;
-        cout<<articulos[x].cantidadTienda<<endl;
-        cout<<articulos[x].cantidadBodega<<endl;
-        cout<<articulos[x].precio<<endl<<endl;
-    }
+    cout<<"SUPERTIENDA MAS+"<<endl<<endl;
+    cout<<"Ingresar Articulos"<<endl;
+    cout<<"Ingrese Codigo (1-100): ";
+    cin>>cod;
+    articulos[cod].codigo = cod;
+    cout<<"Ingrese Codigo de Proveedor: ";
+    cin>>articulos[cod].codProveedor;
+    cout<<"Ingrese Nombre del Producto: ";
+    fflush(stdin); //Sepa, pero sin esta linea no funciona el cin.getline xd
+    cin.getline(articulos[cod].nombre, 100); //Para que se pueda ingresar cadenas de texto con espacios
+    cout<<"Ingrese la Cantidad en Tienda: ";
+    cin>>articulos[cod].cantidadTienda;
+    cout<<"Ingrese la Cantidad en Bodega: ";
+    cin>>articulos[cod].cantidadBodega;
+    cout<<"Ingrese el Precio: ";
+    cin>>articulos[cod].precio;
+    
+    system("cls");
+    mostrarArticulo(cod);
     system("pause");
 }
 
@@ -97,10 +127,11 @@ main()
                 cout<<"Articulos"<<endl;
                 cout<<"1.) Ingresar"<<endl;
                 cout<<"2.) Modificar"<<endl;
-                cout<<"3.) Buscar"<<endl;
-                cout<<"4.) Eliminar"<<endl;
-                cout<<"5.) Traslados"<<endl;
-                cout<<"6.) Regresar"<<endl<<endl;
+                cout<<"3.) Ver"<<endl;
+                cout<<"4.) Buscar"<<endl;
+                cout<<"5.) Eliminar"<<endl;
+                cout<<"6.) Traslados"<<endl;
+                cout<<"7.) Regresar"<<endl<<endl;
                 cout<<"Seleccione una opcion: ";
                 cin>>op1;
                 switch (op1)
