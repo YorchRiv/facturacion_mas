@@ -3,10 +3,77 @@
 #include<math.h>
 #include<windows.h> 
 using namespace std;
+
+struct art //articulos
+{
+    int codigo;
+    int codProveedor;
+    string nombre;
+    int cantidadTienda;
+    int cantidadBodega;
+    float precio;
+
+} articulos[50];
+
+void generarDatos() //Esta Funcion sirve para Generar los datos base, se generaran 5 array por estructura
+{
+    //Datos de Articulos
+    articulos[1].codigo = 1;
+    articulos[1].codProveedor = 200;
+    articulos[1].nombre = "Carne de Res (libra)";
+    articulos[1].cantidadTienda = 50;
+    articulos[1].cantidadBodega = 140;
+    articulos[1].precio = 30.50;
+
+    articulos[2].codigo = 2;
+    articulos[2].codProveedor = 400;
+    articulos[2].nombre = "Carton de Huevos";
+    articulos[2].cantidadTienda = 30;
+    articulos[2].cantidadBodega = 100;
+    articulos[2].precio = 30.45;
+
+    articulos[3].codigo = 3;
+    articulos[3].codProveedor = 400;
+    articulos[3].nombre = "Galon de Leche Lala";
+    articulos[3].cantidadTienda = 24;
+    articulos[3].cantidadBodega = 39;
+    articulos[3].precio = 25.64;
+
+    articulos[4].codigo = 4;
+    articulos[4].codProveedor = 400;
+    articulos[4].nombre = "Aceite de Cocina";
+    articulos[4].cantidadTienda = 60;
+    articulos[4].cantidadBodega = 200;
+    articulos[4].precio = 14.69;
+
+    articulos[5].codigo = 5;
+    articulos[5].codProveedor = 400;
+    articulos[5].nombre = "Libra de Arroz";
+    articulos[5].cantidadTienda = 49;
+    articulos[5].cantidadBodega = 600;
+    articulos[5].precio = 5.50;
+}
+
+void ingresarArticulos()
+{
+    system("cls");
+    for(int x = 1; x<5; x++)
+    {
+        cout<<articulos[x].codigo<<endl;
+        cout<<articulos[x].codProveedor<<endl;
+        cout<<articulos[x].nombre<<endl;
+        cout<<articulos[x].cantidadTienda<<endl;
+        cout<<articulos[x].cantidadBodega<<endl;
+        cout<<articulos[x].precio<<endl<<endl;
+    }
+    system("pause");
+}
+
 main()
 {
     int opcion, op1;
     bool repeticion = true;
+    generarDatos();
     while(repeticion == true)
     {
         system("cls"); //Se inicia el primer menu de inicio
@@ -39,6 +106,7 @@ main()
                 switch (op1)
                 {
                     case 1:
+                        ingresarArticulos();
                     break;
 
                     case 2:
