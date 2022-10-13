@@ -6,7 +6,7 @@
 using namespace std;
 
 /*Pendientes
-    Hacer que no se puedan ingresar codigos repetidos **LISTO PERRA** o bueno revisalo xd
+    Hacer que no se puedan ingresar codigos repetidos /////////ya  me rendi ma;ana sigo jajajaja
     hacer la parte del provedor para que cuando no concida el codigo del proveedor cree uno nuevo
 */
 
