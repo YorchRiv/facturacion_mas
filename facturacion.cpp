@@ -6,7 +6,7 @@
 using namespace std;
 
 /*Pendientes
-    Hacer que no se puedan ingresar codigos repetidos /////////ya  me rendi ma;ana sigo jajajaja
+    Hacer que no se puedan ingresar codigos repetidos /////////yo si puede gei jeje
     hacer la parte del provedor para que cuando no concida el codigo del proveedor cree uno nuevo
 */
 
@@ -14,16 +14,17 @@ int maxArt = 5;
 
 struct art //articulos
 {
-    int codigo;
+    int codigo = 0;
     int codProveedor;
     char nombre[100];
     int cantidadTienda;
     int cantidadBodega;
     float precio;
+    bool activo = false; //para detectar que codigos estan en uso.
 
 } articulos[100];
 
-void generarDatos() //Esta Funcion sirve para Generar los datos base, se generaran 5 array por estructura
+void generarDatos() //Esta Funcion sirve para Generar los datos base, se generaran 15 array por estructura
 {
     //Datos de Articulos
     articulos[1].codigo = 1;
@@ -32,6 +33,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[1].cantidadTienda = 50;
     articulos[1].cantidadBodega = 140;
     articulos[1].precio = 30.50;
+    articulos[1].activo = true;
 
     articulos[2].codigo = 2;
     articulos[2].codProveedor = 400;
@@ -39,6 +41,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[2].cantidadTienda = 30;
     articulos[2].cantidadBodega = 100;
     articulos[2].precio = 30.45;
+    articulos[2].activo = true;
 
     articulos[3].codigo = 3;
     articulos[3].codProveedor = 400;
@@ -46,6 +49,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[3].cantidadTienda = 24;
     articulos[3].cantidadBodega = 39;
     articulos[3].precio = 25.64;
+    articulos[3].activo = true;
 
     articulos[4].codigo = 4;
     articulos[4].codProveedor = 400;
@@ -53,6 +57,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[4].cantidadTienda = 60;
     articulos[4].cantidadBodega = 200;
     articulos[4].precio = 14.69;
+    articulos[4].activo = true;
 
     articulos[5].codigo = 5;
     articulos[5].codProveedor = 400;
@@ -60,6 +65,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[5].cantidadTienda = 49;
     articulos[5].cantidadBodega = 600;
     articulos[5].precio = 50;
+    articulos[5].activo = true;
 
     articulos[6].codigo = 6;
     articulos[6].codProveedor = 100;
@@ -67,6 +73,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[6].cantidadTienda = 15;
     articulos[6].cantidadBodega = 310;
     articulos[6].precio = 9.5;
+    articulos[6].activo = true;
 
     articulos[7].codigo = 7;
     articulos[7].codProveedor = 100;
@@ -74,6 +81,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[7].cantidadTienda = 25;
     articulos[7].cantidadBodega = 200;
     articulos[7].precio = 10;
+    articulos[7].activo = true;
 
     articulos[8].codigo = 8;
     articulos[8].codProveedor = 100;
@@ -81,6 +89,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[8].cantidadTienda = 30;
     articulos[8].cantidadBodega = 90;
     articulos[8].precio = 5.5;
+    articulos[8].activo = true;
 
     articulos[9].codigo = 9;
     articulos[9].codProveedor = 350;
@@ -88,6 +97,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[9].cantidadTienda = 3;
     articulos[9].cantidadBodega = 21;
     articulos[9].precio = 13.5;
+    articulos[9].activo = true;
 
     articulos[10].codigo = 10;
     articulos[10].codProveedor = 200;
@@ -95,6 +105,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[10].cantidadTienda = 15;
     articulos[10].cantidadBodega = 200;
     articulos[10].precio = 9.5;
+    articulos[10].activo = true;
 
     articulos[11].codigo = 11;
     articulos[11].codProveedor = 300;
@@ -102,6 +113,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[11].cantidadTienda = 40;
     articulos[11].cantidadBodega = 100;
     articulos[11].precio = 16.5;
+    articulos[11].activo = true;
 
     articulos[12].codigo = 12;
     articulos[12].codProveedor = 400;
@@ -109,6 +121,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[12].cantidadTienda = 24;
     articulos[12].cantidadBodega = 891;
     articulos[12].precio = 1.5;
+    articulos[12].activo = true;
 
     articulos[13].codigo = 13;
     articulos[13].codProveedor = 100;
@@ -116,6 +129,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[13].cantidadTienda = 51;
     articulos[13].cantidadBodega = 159;
     articulos[13].precio = 1;
+    articulos[13].activo = true;
 
     articulos[14].codigo = 14;
     articulos[14].codProveedor = 200;
@@ -123,6 +137,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[14].cantidadTienda = 19;
     articulos[14].cantidadBodega = 210;
     articulos[14].precio = 20;
+    articulos[14].activo = true;
 
     articulos[15].codigo = 15;
     articulos[15].codProveedor = 500;
@@ -130,6 +145,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[15].cantidadTienda = 43;
     articulos[15].cantidadBodega = 100;
     articulos[15].precio = 9.5;
+    articulos[15].activo = true;
 }
 
 void mostrarArticulo(int cod)
@@ -141,6 +157,7 @@ void mostrarArticulo(int cod)
     cout<<"Cantidad en Tienda: "<<articulos[cod].cantidadTienda<<endl;
     cout<<"Cantidad en Bodega: "<<articulos[cod].cantidadBodega<<endl;
     cout<<"Precio de Producto: "<<articulos[cod].precio<<endl<<endl;
+    cout<<"Activo?: "<<articulos[cod].activo<<endl<<endl;
 }
 
 void ingresarArticulos()
@@ -151,7 +168,9 @@ void ingresarArticulos()
     cout<<"Ingresar Articulos"<<endl;
     cout<<"Ingrese Codigo (1-100): ";
     cin>>cod;
-    while (cod =! articulos[cod].codigo){    //el while es para ver que el codigo que se ingrese no sea igual a que tenemos ya
+    if(articulos[cod].activo == false) //queda mejor con un if
+    {
+        articulos[cod].activo = true;
         articulos[cod].codigo = cod;
         cout<<"Ingrese Codigo de Proveedor: ";
         cin>>articulos[cod].codProveedor;
@@ -167,11 +186,14 @@ void ingresarArticulos()
         system("cls");
         mostrarArticulo(cod);
         system("pause");
-        }
+    }
+    else
+    {
         system("cls");
-        cout<<"Articulo ya ingresado."<<endl;
+        cout<<"Codigo ya Existente, ingrese uno diferente."<<endl;
         system("pause");
     }
+}
     
 
 main()
