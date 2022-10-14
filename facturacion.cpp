@@ -8,6 +8,8 @@ using namespace std;
 /*Pendientes
     Hacer que no se puedan ingresar codigos repetidos /////////yo si puede gei jeje
     hacer la parte del provedor para que cuando no concida el codigo del proveedor cree uno nuevo
+    No se muestran bien los acentos, corregir
+    Que se pueda modificar codigo de producto en funcion modificarArticulos
 */
 
 int maxArt = 5;
@@ -150,7 +152,6 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
 
 void mostrarArticulo(int cod)
 {
-    cout<<"Este es el articulo ingresado: "<<endl<<endl;
     cout<<"Codigo de Producto: "<<articulos[cod].codigo<<endl;
     cout<<"Codigo de Provedor: "<<articulos[cod].codProveedor<<endl;
     cout<<"Nombre de Producto: "<<articulos[cod].nombre<<endl;
@@ -160,14 +161,8 @@ void mostrarArticulo(int cod)
     cout<<"Activo?: "<<articulos[cod].activo<<endl<<endl;
 }
 
-void ingresarArticulos()
+void ingresarArticulos(int cod) //Pendientes, hacer lo del codigo del proveedor
 {
-    int cod;
-    system("cls");
-    cout<<"SUPERTIENDA MAS+"<<endl<<endl;
-    cout<<"Ingresar Articulos"<<endl;
-    cout<<"Ingrese Codigo (1-100): ";
-    cin>>cod;
     if(articulos[cod].activo == false) //queda mejor con un if
     {
         articulos[cod].activo = true;
@@ -184,6 +179,7 @@ void ingresarArticulos()
         cout<<"Ingrese el Precio: ";
         cin>>articulos[cod].precio;
         system("cls");
+        cout<<"Este es el articulo ingresado: "<<endl<<endl;
         mostrarArticulo(cod);
         system("pause");
     }
@@ -194,11 +190,34 @@ void ingresarArticulos()
         system("pause");
     }
 }
+
+void modificarArticulos()
+{
+    int cod;
+    system("cls");
+    cout<<"Ingrese el codigo del articulo que desea modificar: ";
+    cin>>cod;
+    if(articulos[cod].activo == true)
+    { 
+        cout<<"Estos son los datos actuales del producto: "<<endl<<endl;
+        mostrarArticulo(cod);
+        system("pause");
+        system("cls");
+        articulos[cod].activo = false;
+        ingresarArticulos(cod);
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
     
 
 main()
 {
-    int opcion, op1;
+    int opcion, op1, cod;
     bool repeticion = true;
     generarDatos();
     while(repeticion == true)
@@ -234,10 +253,16 @@ main()
                 switch (op1)
                 {
                     case 1:
-                        ingresarArticulos();
+                        system("cls");
+                        cout<<"SUPERTIENDA MAS+"<<endl<<endl;
+                        cout<<"Ingresar Articulos"<<endl;
+                        cout<<"Ingrese Codigo (1-100): ";
+                        cin>>cod;
+                        ingresarArticulos(cod);
                     break;
 
                     case 2:
+                        modificarArticulos();
                     break;
 
                     case 3:
