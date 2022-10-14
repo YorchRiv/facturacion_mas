@@ -15,8 +15,6 @@ using namespace std;
     Hacer que los datos se vean como en una tabla en la funcion verArticulos() con gotoxy
     */
 
-int maxArt = 5;
-
 struct art //articulos
 {
     int codigo = 0;
@@ -259,6 +257,85 @@ void eliminarArticulos()
     }
 }
 
+void trasladarArticulos()
+{
+    int cod, op, traslado;
+    system("cls");
+    cout<<"Ingrese el codigo del articulo a trasladar: ";
+    cin>>cod;
+    if(articulos[cod].activo == true)
+    {
+        system("cls");
+        cout<<"Informacion del Articulo: "<<endl<<endl;
+        mostrarArticulo(cod);
+        cout<<"1.) Trasladar de Tienda a Bodega"<<endl;
+        cout<<"2.) Trasladar de Bodega a tienda"<<endl;
+        cout<<"3.) Cancelar"<<endl;
+        cout<<"Seleccione una opcion: ";
+        cin>>op;
+        if(op == 1 && articulos[cod].cantidadTienda > 0) //Tienda a bodega
+        {
+            system("cls");
+            cout<<"Existen "<<articulos[cod].cantidadTienda<<" unidades de "<<articulos[cod].nombre<<" en tienda"<<endl;
+            cout<<"Cuantos Requiere trasladar a bodega?: ";
+            cin>>traslado;
+            if(traslado <= articulos[cod].cantidadTienda && traslado > 0)
+            {
+                system("cls");
+                articulos[cod].cantidadTienda -= traslado;
+                articulos[cod].cantidadBodega += traslado;
+                cout<<"Se trasladaron "<<traslado<<" unidades de "<<articulos[cod].nombre<<" a bodega"<<endl;
+                system("pause");
+            }
+            else
+            {
+                system("cls");
+                cout<<"Datos invalidos"<<endl;
+                system("pause");
+            }
+        }
+        else if(articulos[cod].cantidadTienda == 0)
+        {
+            system("cls");
+            cout<<"No existen Articulos en tienda"<<endl;
+            system("pause");
+        }
+        if(op == 2 && articulos[cod].cantidadBodega > 0) //bodega a tienda
+        {
+            system("cls");
+            cout<<"Existen "<<articulos[cod].cantidadBodega<<" unidades de "<<articulos[cod].nombre<<" en bodega"<<endl;
+            cout<<"Cuantos Requiere trasladar a tienda?: ";
+            cin>>traslado;
+            if(traslado <= articulos[cod].cantidadBodega && traslado > 0)
+            {
+                system("cls");
+                articulos[cod].cantidadTienda += traslado;
+                articulos[cod].cantidadBodega -= traslado;
+                cout<<"Se trasladaron "<<traslado<<" unidades de "<<articulos[cod].nombre<<" a tienda"<<endl;
+                system("pause");
+            }
+            else
+            {
+                system("cls");
+                cout<<"Datos invalidos"<<endl;
+                system("pause");
+            }
+        }
+        else if(articulos[cod].cantidadBodega == 0)
+        {
+            system("cls");
+            cout<<"No existen Articulos en bodega"<<endl;
+            system("pause");
+        }
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
+
 main()
 {
     int opcion, op1, cod;
@@ -321,6 +398,10 @@ main()
                     break;
                     
                     case 6:
+                        trasladarArticulos();
+                    break;
+
+                    case 7:
                         repeticion = true;
                     break;
 
