@@ -7,10 +7,13 @@ using namespace std;
 
 /*Pendientes
     Hacer que no se puedan ingresar codigos repetidos /////////yo si puede gei jeje
-    hacer la parte del provedor para que cuando no concida el codigo del proveedor cree uno nuevo
+    hacer la parte del provedor para que cuando no concida el codigo del proveedor cree uno nuevo, ya que deve existir el proveedor para ingresar el articulo.
     No se muestran bien los acentos, corregir
     Que se pueda modificar codigo de producto en funcion modificarArticulos
-*/
+    que pregunte si de verdad quiere modifcar el articulo
+
+    Hacer que los datos se vean como en una tabla en la funcion verArticulos() con gotoxy
+    */
 
 int maxArt = 5;
 
@@ -158,7 +161,7 @@ void mostrarArticulo(int cod)
     cout<<"Cantidad en Tienda: "<<articulos[cod].cantidadTienda<<endl;
     cout<<"Cantidad en Bodega: "<<articulos[cod].cantidadBodega<<endl;
     cout<<"Precio de Producto: "<<articulos[cod].precio<<endl<<endl;
-    cout<<"Activo?: "<<articulos[cod].activo<<endl<<endl;
+    //cout<<"Activo?: "<<articulos[cod].activo<<endl<<endl;
 }
 
 void ingresarArticulos(int cod) //Pendientes, hacer lo del codigo del proveedor
@@ -179,7 +182,7 @@ void ingresarArticulos(int cod) //Pendientes, hacer lo del codigo del proveedor
         cout<<"Ingrese el Precio: ";
         cin>>articulos[cod].precio;
         system("cls");
-        cout<<"Este es el articulo ingresado: "<<endl<<endl;
+        cout<<"Este es el articulo: "<<endl<<endl;
         mostrarArticulo(cod);
         system("pause");
     }
@@ -213,7 +216,48 @@ void modificarArticulos()
         system("pause");
     }
 }
-    
+
+void verArticulos()
+{
+    system("cls");
+    for(int x = 1; x <= 100; x++)
+    {
+        if(articulos[x].activo == true)
+        {
+            mostrarArticulo(x);
+        }
+    }
+    system("pause");
+}
+
+void eliminarArticulos()
+{
+    int cod, op;
+    system("cls");
+    cout<<"Ingrese el codigo del articulo que desea eliminar: ";
+    cin>>cod;
+    if(articulos[cod].activo == true)
+    { 
+        cout<<"Estos son los datos actuales del producto: "<<endl<<endl;
+        mostrarArticulo(cod);
+        system("cls");
+        cout<<"Esta seguro de eliminar este articulo? (1 = si, 2 = no): ";
+        cin>>op;
+        if(op == 1)
+        {
+            articulos[cod].activo = false;
+            system("cls");
+            cout<<"Articulo Eliminado Exitosamente"<<endl;
+            system("pause");
+        }
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
 
 main()
 {
@@ -266,12 +310,14 @@ main()
                     break;
 
                     case 3:
+                        verArticulos();
                     break;
 
                     case 4:
                     break;
 
                     case 5:
+                        eliminarArticulos();
                     break;
                     
                     case 6:
