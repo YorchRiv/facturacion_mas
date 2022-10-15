@@ -3,6 +3,8 @@
 #include<math.h>
 #include<windows.h> 
 #include<string>
+#include<conio.h>
+
 using namespace std;
 
 /*Pendientes
@@ -257,6 +259,85 @@ void eliminarArticulos()
     }
 }
 
+void buscarArticulos()
+{
+    int op, cod, codP, p = 0;
+
+    //Para opcion de busqueda;
+    string texto, nombre;
+    size_t posicion;
+
+    system("cls");
+    cout<<"Buscar Articulos"<<endl;
+    cout<<"1.) Por Codigo de Producto"<<endl;
+    cout<<"2.) Por Codigo de Proveedor"<<endl;
+    cout<<"3.) Por Nombre de Articulo"<<endl;
+    cout<<"4.) Cancelar"<<endl<<endl;
+    cout<<"Seleccione una opcion de busqueda: ";
+    cin>>op;
+    switch (op)
+    {
+        case 1: //por codigo
+            system("cls");
+            cout<<"Ingrese codigo de articulo: ";
+            cin>>cod;
+            cout<<endl;
+            if(articulos[cod].activo == true)
+            {
+                mostrarArticulo(cod); 
+                system("pause");
+            }
+            else
+            {
+                system("cls");
+                cout<<"Codigo no Existente"<<endl;
+                system("pause");
+            }
+        break;
+    
+        case 2: //por proveedor
+            system("cls");
+            cout<<"Ingrese codigo de proveedor: ";
+            cin>>codP;
+            cout<<endl;
+            system("cls");
+            for(int x = 1; x <= 100; x++)
+            {
+                if(articulos[x].codProveedor == codP)
+                {
+                    mostrarArticulo(x);
+                    p += 1;
+                }
+            }
+            if (p == 0)
+            {
+                cout<<"Proveedor no existente"<<endl;
+            }
+            system("pause");
+        break;
+
+        case 3:
+            system("cls");
+            cout<<"Ingrese nombre a buscar: ";
+            cin>>nombre;
+            for(int x = 1; x <= 100; x++)
+            {
+                texto = articulos[x].nombre;
+                posicion = texto.find(nombre);
+
+                if(posicion != string::npos)
+                {
+                    mostrarArticulo(x);
+                }
+            }
+            system("pause");
+        break;
+
+        default:
+        break;
+    }
+}
+
 void trasladarArticulos()
 {
     int cod, op, traslado;
@@ -391,6 +472,7 @@ main()
                     break;
 
                     case 4:
+                        buscarArticulos();
                     break;
 
                     case 5:
