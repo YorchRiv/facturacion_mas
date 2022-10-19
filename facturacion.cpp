@@ -13,7 +13,7 @@ using namespace std;
     No se muestran bien los acentos, corregir
     Que se pueda modificar codigo de producto en funcion modificarArticulos
     que pregunte si de verdad quiere modifcar el articulo
-
+    hacer que tire mensaje de error cuando no encuentre buscando por nombre
     Hacer que los datos se vean como en una tabla en la funcion verArticulos() con gotoxy
     */
 
@@ -205,7 +205,7 @@ void modificarArticulos()
         cout<<"Estos son los datos actuales del producto: "<<endl<<endl;
         mostrarArticulo(cod);
         system("pause");
-        system("cls");
+        //system("cls");
         articulos[cod].activo = false;
         ingresarArticulos(cod);
     }
@@ -240,8 +240,7 @@ void eliminarArticulos()
     { 
         cout<<"Estos son los datos actuales del producto: "<<endl<<endl;
         mostrarArticulo(cod);
-        system("cls");
-        cout<<"Esta seguro de eliminar este articulo? (1 = si, 2 = no): ";
+        cout<<endl<<"Esta seguro de eliminar este articulo? (1 = si, 2 = no): ";
         cin>>op;
         if(op == 1)
         {
@@ -445,9 +444,9 @@ main()
                 cout<<"Articulos"<<endl;
                 cout<<"1.) Ingresar"<<endl;
                 cout<<"2.) Modificar"<<endl;
-                cout<<"3.) Ver"<<endl;
-                cout<<"4.) Buscar"<<endl;
-                cout<<"5.) Eliminar"<<endl;
+                cout<<"3.) Buscar"<<endl;
+                cout<<"4.) Eliminar"<<endl;
+                cout<<"5.) Ver todo"<<endl;
                 cout<<"6.) Traslados"<<endl;
                 cout<<"7.) Regresar"<<endl<<endl;
                 cout<<"Seleccione una opcion: ";
@@ -468,15 +467,15 @@ main()
                     break;
 
                     case 3:
-                        verArticulos();
-                    break;
-
-                    case 4:
                         buscarArticulos();
                     break;
 
-                    case 5:
+                    case 4:
                         eliminarArticulos();
+                    break;
+
+                    case 5:
+                        verArticulos();
                     break;
                     
                     case 6:
