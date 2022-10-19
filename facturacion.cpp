@@ -463,7 +463,7 @@ void mostrarCliente(int cod)
     cout<<"Codigo de Cliente: "<<clientes[cod].codigo<<endl;
     cout<<"Nombre de Cliente: "<<clientes[cod].nombre<<endl;
     cout<<"Direccion de Cliente: "<<clientes[cod].direccion<<endl;
-    cout<<"Nit de Cliente: "<<clientes[cod].nit<<endl;
+    cout<<"Nit de Cliente: "<<clientes[cod].nit<<endl<<endl;
 }
 
 void ingresarClientes(int cod)
@@ -644,6 +644,22 @@ void eliminarClientes()
     }
 }
 
+void verClientes()
+{
+    system("cls");
+    for(int x = 1; x <= 100; x++)
+    {
+        if(clientes[x].activo == true)
+        {
+            mostrarCliente(x);
+        }
+    }
+    system("pause");
+}
+
+//Metodos de Proveedores
+
+
 main()
 {
     int opcion, op1, cod;
@@ -728,7 +744,8 @@ main()
                 cout<<"2.) Modificar"<<endl;
                 cout<<"3.) Buscar"<<endl;
                 cout<<"4.) Eliminar"<<endl;
-                cout<<"5.) Regresar"<<endl<<endl;
+                cout<<"5.) Ver todo"<<endl;
+                cout<<"6.) Regresar"<<endl<<endl;
                 cout<<"Seleccione una opcion: ";
                 cin>>op1;
                 switch (op1)
@@ -755,6 +772,10 @@ main()
                     break;
 
                     case 5:
+                        verClientes();
+                    break;
+
+                    case 6:
                         repeticion = true;
                     break;
 
