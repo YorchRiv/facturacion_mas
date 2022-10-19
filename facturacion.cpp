@@ -38,12 +38,23 @@ struct client //Clientes
     bool activo = false;
 } clientes[100];
 
+struct prov
+{
+    int codigo = 0;
+    char nombre[100];
+    char direccion[100];
+    int nit;
+    int telefono;
+    bool activo = false;
+}proveedores[100];
+
+
 
 void generarDatos() //Esta Funcion sirve para Generar los datos base, se generaran 15 array por estructura
 {
     //Datos de Articulos
     articulos[1].codigo = 1;
-    articulos[1].codProveedor = 200;
+    articulos[1].codProveedor = 100;
     strcpy(articulos[1].nombre, "Arroz");
     articulos[1].cantidadTienda = 50;
     articulos[1].cantidadBodega = 140;
@@ -107,7 +118,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[8].activo = true;
 
     articulos[9].codigo = 9;
-    articulos[9].codProveedor = 350;
+    articulos[9].codProveedor = 200;
     strcpy(articulos[9].nombre, "Chile piquín");
     articulos[9].cantidadTienda = 3;
     articulos[9].cantidadBodega = 21;
@@ -115,7 +126,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[9].activo = true;
 
     articulos[10].codigo = 10;
-    articulos[10].codProveedor = 200;
+    articulos[10].codProveedor = 300;
     strcpy(articulos[10].nombre, "Flan en Polvo");
     articulos[10].cantidadTienda = 15;
     articulos[10].cantidadBodega = 200;
@@ -191,6 +202,41 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     strcpy(clientes[5].direccion, "Zona 13");
     clientes[5].nit = 668889758;
     clientes[5].activo = true;
+
+    proveedores[1].codigo = 100;
+    strcpy(proveedores[1].nombre, "Productos Macarena");
+    strcpy(proveedores[1].direccion, "Guatemela");
+    proveedores[1].nit = 668889758;
+    proveedores[1].telefono = 50889976;
+    proveedores[1].activo = true;
+    
+    proveedores[2].codigo = 200;
+    strcpy(proveedores[2].nombre, "La Popular");
+    strcpy(proveedores[2].direccion, "Guatemela");
+    proveedores[2].nit = 864884458;
+    proveedores[2].telefono = 60604500;
+    proveedores[2].activo = true;
+
+    proveedores[3].codigo = 300;
+    strcpy(proveedores[3].nombre, "Productos Castilla");
+    strcpy(proveedores[3].direccion, "Zona 10");
+    proveedores[3].nit = 333445566;
+    proveedores[3].telefono = 40658977;
+    proveedores[3].activo = true;
+
+    proveedores[4].codigo = 400;
+    strcpy(proveedores[4].nombre, "MexiProductos");
+    strcpy(proveedores[4].direccion, "Mexico");
+    proveedores[4].nit = 3145689;
+    proveedores[4].telefono = 50889976;
+    proveedores[4].activo = true;
+
+    proveedores[5].codigo = 500;
+    strcpy(proveedores[5].nombre, "Ingenio Pantaleon");
+    strcpy(proveedores[5].direccion, "Escuintla");
+    proveedores[5].nit = 667854233;
+    proveedores[5].telefono = 90904500;
+    proveedores[5].activo = true;
 }
 
 //Metodos de Articulos
@@ -658,7 +704,226 @@ void verClientes()
 }
 
 //Metodos de Proveedores
+int generarCodProv(int cod) //Esta funcion recibiara el codigo del proveedor y devolvera su valor en el array
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(proveedores[x].codigo == cod)
+        {
+            return x;
+        }
+    }
+}
 
+void mostrarProv(int cod)
+{
+    cout<<"Codigo de Proveedor: "<<proveedores[cod].codigo<<endl;
+    cout<<"Nombre de Proveedor: "<<proveedores[cod].nombre<<endl;
+    cout<<"Direccion de Proveedor: "<<proveedores[cod].direccion<<endl;
+    cout<<"Nit de Proveedor: "<<proveedores[cod].nit<<endl;
+    cout<<"Telefono de Proveedor: "<<proveedores[cod].telefono<<endl<<endl;
+}
+
+void ingresarProv(int codd)
+{
+    int cod;
+    cod = generarCodProv(codd);
+    cout<<cod<<endl;
+    system("pause");
+    if(proveedores[cod].activo == false) //queda mejor con un if
+    {
+        proveedores[cod].activo = true;
+        //pendiente, hacer ciclo para encontrar array disponible para guardar codigo de proveedor
+        proveedores[cod].codigo = codd;
+        cout<<"Ingrese Nombre del Proveedor: ";
+        fflush(stdin);
+        cin.getline(proveedores[cod].nombre, 100);
+        cout<<"Ingrese la Direccion: ";
+        fflush(stdin);
+        cin.getline(proveedores[cod].direccion, 100);
+        cout<<"Ingrese el Nit: ";
+        cin>>proveedores[cod].nit;
+        cout<<"Ingrese el Telefono: ";
+        cin>>proveedores[cod].telefono;
+        system("cls");
+        cout<<"Este es el Proveedor: "<<endl<<endl;
+        mostrarProv(cod);
+        system("pause");
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo ya Existente, ingrese uno diferente."<<endl;
+        system("pause");
+    }
+}
+
+void modificarProv()
+{
+    int cod;
+    system("cls");
+    cout<<"Ingrese el codigo del cliente que desea modificar: ";
+    cin>>cod;
+    if(proveedores[cod].activo == true)
+    { 
+        cout<<"Estos son los datos actuales del cliente: "<<endl<<endl;
+        mostrarProv(cod);
+        system("pause");
+        //system("cls");
+        proveedores[cod].activo = false;
+        ingresarProv(cod);
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
+
+void buscarProv()
+{
+    int op, cod, codP, p = 0;
+    int codPP;
+
+    //Para opcion de busqueda;
+    string texto, nombre;
+    size_t posicion;
+
+    system("cls");
+    cout<<"Buscar Clientes"<<endl;
+    cout<<"1.) Por Codigo de Proveedor"<<endl;
+    cout<<"2.) Por NIT de Proveedor"<<endl;
+    cout<<"3.) Por Nombre de Proveedor"<<endl;
+    cout<<"4.) Por Direccion de Proveedor"<<endl;
+    cout<<"5.) Cancelar"<<endl<<endl;
+    cout<<"Seleccione una opcion de busqueda: ";
+    cin>>op;
+    switch (op)
+    {
+        case 1: //por codigo
+            system("cls");
+            cout<<"Ingrese codigo de Proveedor: ";
+            cin>>cod;
+            codPP = generarCodProv(cod);
+            cout<<endl;
+            if(proveedores[codPP].activo == true)
+            {
+                mostrarProv(codPP);
+                system("pause");
+            }
+            else
+            {
+                system("cls");
+                cout<<"Codigo no Existente"<<endl;
+                system("pause");
+            }
+        break;
+    
+        case 2: //por nit
+            system("cls");
+            cout<<"Ingrese NIT de Proveedor: ";
+            cin>>codP;
+            cout<<endl;
+            system("cls");
+            for(int x = 1; x <= 100; x++)
+            {
+                if(proveedores[x].nit == codP)
+                {
+                    mostrarProv(x);
+                    p += 1;
+                }
+            }
+            if (p == 0)
+            {
+                cout<<"NIT no existente"<<endl;
+            }
+            system("pause");
+        break;
+
+        case 3: //nombre
+            system("cls");
+            cout<<"Ingrese nombre a buscar: ";
+            cin>>nombre;
+            for(int x = 1; x <= 100; x++)
+            {
+                texto = proveedores[x].nombre;
+                posicion = texto.find(nombre);
+
+                if(posicion != string::npos)
+                {
+                    system("cls");
+                    cout<<"Datos Encontrados: "<<endl;
+                    mostrarProv(x);
+                }
+            }
+            system("pause");
+        break;
+
+        case 4:
+            system("cls");
+            cout<<"Ingrese Direccion a buscar: ";
+            cin>>nombre;
+            for(int x = 1; x <= 100; x++)
+            {
+                texto = proveedores[x].direccion;
+                posicion = texto.find(nombre);
+
+                if(posicion != string::npos)
+                {
+                    system("cls");
+                    cout<<"Datos Encontrados: "<<endl;
+                    mostrarProv(x);
+                }
+            }
+            system("pause");
+        break;
+
+        default:
+        break;
+    }
+}
+
+void eliminarProv()
+{
+    int cod, op;
+    system("cls");
+    cout<<"Ingrese el codigo del Proveedor que desea eliminar: ";
+    cin>>cod;
+    if(proveedores[cod].activo == true)
+    { 
+        cout<<"Estos son los datos actuales del Proveedor: "<<endl<<endl;
+        mostrarProv(cod);
+        cout<<endl<<"Esta seguro de eliminar este Proveedor? (1 = si, 2 = no): ";
+        cin>>op;
+        if(op == 1)
+        {
+            proveedores[cod].activo = false;
+            system("cls");
+            cout<<"Proveedor Eliminado Exitosamente"<<endl;
+            system("pause");
+        }
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
+
+void verProv()
+{
+    system("cls");
+    for(int x = 1; x <= 100; x++)
+    {
+        if(proveedores[x].activo == true)
+        {
+            mostrarProv(x);
+        }
+    }
+    system("pause");
+}
 
 main()
 {
@@ -798,24 +1063,38 @@ main()
                 cout<<"2.) Modificar"<<endl;
                 cout<<"3.) Buscar"<<endl;
                 cout<<"4.) Eliminar"<<endl;
+                cout<<"5.) Ver todo"<<endl;
                 cout<<"5.) Regresar"<<endl<<endl;
                 cout<<"Seleccione una opcion: ";
                 cin>>op1;
                 switch (op1)
                 {
                     case 1:
+                        system("cls");
+                        cout<<"SUPERTIENDA MAS+"<<endl<<endl;
+                        cout<<"Ingresar Proveedores"<<endl;
+                        cout<<"Ingrese Codigo (100-1000): ";
+                        cin>>cod;
+                        ingresarProv(cod);
                     break;
 
                     case 2:
+                        modificarProv();
                     break;
 
                     case 3:
+                        buscarProv();
                     break;
 
                     case 4:
+                        eliminarProv();
                     break;
 
                     case 5:
+                        verProv();
+                    break;
+
+                    case 6:
                         repeticion = true;
                     break;
 
