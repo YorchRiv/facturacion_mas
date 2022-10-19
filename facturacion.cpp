@@ -29,6 +29,16 @@ struct art //articulos
 
 } articulos[100];
 
+struct client //Clientes
+{
+    int codigo = 0;
+    char nombre[100];
+    char direccion[100];
+    int nit;
+    bool activo = false;
+} clientes[100];
+
+
 void generarDatos() //Esta Funcion sirve para Generar los datos base, se generaran 15 array por estructura
 {
     //Datos de Articulos
@@ -151,8 +161,39 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[15].cantidadBodega = 100;
     articulos[15].precio = 9.5;
     articulos[15].activo = true;
+
+    clientes[1].codigo = 1;
+    strcpy(clientes[1].nombre, "Jorge Mejicanos");
+    strcpy(clientes[1].direccion, "Amatitlan");
+    clientes[1].nit = 111449022;
+    clientes[1].activo = true;
+
+    clientes[2].codigo = 2;
+    strcpy(clientes[2].nombre, "Oscar Tobias");
+    strcpy(clientes[2].direccion, "Palin");
+    clientes[2].nit = 449988445;
+    clientes[2].activo = true;
+
+    clientes[3].codigo = 3;
+    strcpy(clientes[3].nombre, "Juan Gutierrez");
+    strcpy(clientes[3].direccion, "Villa nueva");
+    clientes[3].nit = 666888775;
+    clientes[3].activo = true;
+
+    clientes[4].codigo = 4;
+    strcpy(clientes[4].nombre, "Madai Cabrera");
+    strcpy(clientes[4].direccion, "San jose");
+    clientes[4].nit = 999887744;
+    clientes[4].activo = true;
+
+    clientes[5].codigo = 5;
+    strcpy(clientes[5].nombre, "Baldomero Fuentes");
+    strcpy(clientes[5].direccion, "Zona 13");
+    clientes[5].nit = 668889758;
+    clientes[5].activo = true;
 }
 
+//Metodos de Articulos
 void mostrarArticulo(int cod)
 {
     cout<<"Codigo de Producto: "<<articulos[cod].codigo<<endl;
@@ -416,6 +457,193 @@ void trasladarArticulos()
     }
 }
 
+// Metodos de Clientes
+void mostrarCliente(int cod)
+{
+    cout<<"Codigo de Cliente: "<<clientes[cod].codigo<<endl;
+    cout<<"Nombre de Cliente: "<<clientes[cod].nombre<<endl;
+    cout<<"Direccion de Cliente: "<<clientes[cod].direccion<<endl;
+    cout<<"Nit de Cliente: "<<clientes[cod].nit<<endl;
+}
+
+void ingresarClientes(int cod)
+{
+    if(clientes[cod].activo == false) //queda mejor con un if
+    {
+        clientes[cod].activo = true;
+        clientes[cod].codigo = cod;
+        cout<<"Ingrese Nombre del Cliente: ";
+        fflush(stdin); //Sepa, pero sin esta linea no funciona el cin.getline xd
+        cin.getline(clientes[cod].nombre, 100);
+        cout<<"Ingrese la Direccion: ";
+        cin>>clientes[cod].direccion;
+        cout<<"Ingrese el Nit: ";
+        cin>>clientes[cod].nit;
+        system("cls");
+        cout<<"Este es el cliente: "<<endl<<endl;
+        mostrarCliente(cod);
+        system("pause");
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo ya Existente, ingrese uno diferente."<<endl;
+        system("pause");
+    }
+}
+
+void modificarClientes()
+{
+    int cod;
+    system("cls");
+    cout<<"Ingrese el codigo del cliente que desea modificar: ";
+    cin>>cod;
+    if(clientes[cod].activo == true)
+    { 
+        cout<<"Estos son los datos actuales del cliente: "<<endl<<endl;
+        mostrarCliente(cod);
+        system("pause");
+        //system("cls");
+        clientes[cod].activo = false;
+        ingresarClientes(cod);
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
+
+void buscarClientes()
+{
+    int op, cod, codP, p = 0;
+
+    //Para opcion de busqueda;
+    string texto, nombre;
+    size_t posicion;
+
+    system("cls");
+    cout<<"Buscar Clientes"<<endl;
+    cout<<"1.) Por Codigo de Cliente"<<endl;
+    cout<<"2.) Por NIT de Cliente"<<endl;
+    cout<<"3.) Por Nombre de Cliente"<<endl;
+    cout<<"4.) Por Direccion de Cliente"<<endl;
+    cout<<"5.) Cancelar"<<endl<<endl;
+    cout<<"Seleccione una opcion de busqueda: ";
+    cin>>op;
+    switch (op)
+    {
+        case 1: //por codigo
+            system("cls");
+            cout<<"Ingrese codigo de Cliente: ";
+            cin>>cod;
+            cout<<endl;
+            if(clientes[cod].activo == true)
+            {
+                mostrarCliente(cod); 
+                system("pause");
+            }
+            else
+            {
+                system("cls");
+                cout<<"Codigo no Existente"<<endl;
+                system("pause");
+            }
+        break;
+    
+        case 2: //por proveedor
+            system("cls");
+            cout<<"Ingrese NIT de Cliente: ";
+            cin>>codP;
+            cout<<endl;
+            system("cls");
+            for(int x = 1; x <= 100; x++)
+            {
+                if(clientes[x].nit == codP)
+                {
+                    mostrarCliente(x);
+                    p += 1;
+                }
+            }
+            if (p == 0)
+            {
+                cout<<"NIT no existente"<<endl;
+            }
+            system("pause");
+        break;
+
+        case 3:
+            system("cls");
+            cout<<"Ingrese nombre a buscar: ";
+            cin>>nombre;
+            for(int x = 1; x <= 100; x++)
+            {
+                texto = clientes[x].nombre;
+                posicion = texto.find(nombre);
+
+                if(posicion != string::npos)
+                {
+                    system("cls");
+                    cout<<"Datos Encontrados: "<<endl;
+                    mostrarCliente(x);
+                }
+            }
+            system("pause");
+        break;
+
+        case 4:
+            system("cls");
+            cout<<"Ingrese Direccion a buscar: ";
+            cin>>nombre;
+            for(int x = 1; x <= 100; x++)
+            {
+                texto = clientes[x].direccion;
+                posicion = texto.find(nombre);
+
+                if(posicion != string::npos)
+                {
+                    system("cls");
+                    cout<<"Datos Encontrados: "<<endl;
+                    mostrarCliente(x);
+                }
+            }
+            system("pause");
+        break;
+
+        default:
+        break;
+    }
+}
+
+void eliminarClientes()
+{
+    int cod, op;
+    system("cls");
+    cout<<"Ingrese el codigo del Cliente que desea eliminar: ";
+    cin>>cod;
+    if(clientes[cod].activo == true)
+    { 
+        cout<<"Estos son los datos actuales del Cliente: "<<endl<<endl;
+        mostrarCliente(cod);
+        cout<<endl<<"Esta seguro de eliminar este Cliente? (1 = si, 2 = no): ";
+        cin>>op;
+        if(op == 1)
+        {
+            clientes[cod].activo = false;
+            system("cls");
+            cout<<"Cliente Eliminado Exitosamente"<<endl;
+            system("pause");
+        }
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
+
 main()
 {
     int opcion, op1, cod;
@@ -506,15 +734,24 @@ main()
                 switch (op1)
                 {
                     case 1:
+                        system("cls");
+                        cout<<"SUPERTIENDA MAS+"<<endl<<endl;
+                        cout<<"Ingresar Clientes"<<endl;
+                        cout<<"Ingrese Codigo (1-100): ";
+                        cin>>cod;
+                        ingresarClientes(cod);
                     break;
 
                     case 2:
+                        modificarClientes();
                     break;
 
                     case 3:
+                        buscarClientes();
                     break;
 
                     case 4:
+                        eliminarClientes();
                     break;
 
                     case 5:
