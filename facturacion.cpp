@@ -8,7 +8,6 @@
 using namespace std;
 
 /*Pendientes
-    hacer la parte del provedor para que cuando no concida el codigo del proveedor cree uno nuevo, ya que deve existir el proveedor para ingresar el articulo.
     No se muestran bien los acentos, corregir
     Que se pueda modificar codigo de producto en funcion modificarArticulos
     que pregunte si de verdad quiere modifcar el articulo
