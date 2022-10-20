@@ -274,6 +274,263 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     empleados[4].activo = true;
 }
 
+bool existeProv(int cod)
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(proveedores[x].codigo == cod)
+        {
+            return true;
+            break;
+        }
+        if(x == 100 and proveedores[x].codigo != cod)
+        {
+            return false;
+            break;
+        }
+    }
+}
+
+//Metodos de Proveedores
+int generarCodProv(int cod) //Esta funcion recibiara el codigo del proveedor y devolvera su valor en el array
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(proveedores[x].codigo == cod)
+        {
+            return x;
+            break;
+        }
+    }
+}
+
+int arrayProv() //Esta funcion devolvera el numero del array mas cercano que este vacio.
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(proveedores[x].activo == false)
+        {
+            return x;
+            break;
+        }
+    }
+}
+
+void mostrarProv(int cod)
+{
+    cout<<"Codigo de Proveedor: "<<proveedores[cod].codigo<<endl;
+    cout<<"Nombre de Proveedor: "<<proveedores[cod].nombre<<endl;
+    cout<<"Direccion de Proveedor: "<<proveedores[cod].direccion<<endl;
+    cout<<"Nit de Proveedor: "<<proveedores[cod].nit<<endl;
+    cout<<"Telefono de Proveedor: "<<proveedores[cod].telefono<<endl<<endl;
+}
+
+void ingresarProv(int codd)
+{
+    int cod;
+    cod = arrayProv();
+    if(proveedores[cod].activo == false) //queda mejor con un if
+    {
+        proveedores[cod].activo = true;
+        proveedores[cod].codigo = codd;
+        cout<<"Ingrese Nombre del Proveedor: ";
+        fflush(stdin);
+        cin.getline(proveedores[cod].nombre, 100);
+        cout<<"Ingrese la Direccion: ";
+        fflush(stdin);
+        cin.getline(proveedores[cod].direccion, 100);
+        cout<<"Ingrese el Nit: ";
+        cin>>proveedores[cod].nit;
+        cout<<"Ingrese el Telefono: ";
+        cin>>proveedores[cod].telefono;
+        system("cls");
+        cout<<"Este es el Proveedor: "<<endl<<endl;
+        mostrarProv(cod);
+        system("pause");
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo ya Existente, ingrese uno diferente."<<endl;
+        system("pause");
+    }
+}
+
+void modificarProv()
+{
+    int cod, codPP;
+    system("cls");
+
+    system("cls");
+    cout<<"Ingrese el codigo del proveedor que desea modificar: ";
+    cin>>cod;
+    codPP = generarCodProv(cod);
+    cout<<codPP<<endl;
+    system("pause");
+    if(proveedores[codPP].activo == true)
+    { 
+        cout<<"Estos son los datos actuales del Proveedor: "<<endl<<endl;
+        mostrarProv(codPP);
+        cout<<endl;
+        system("pause");
+        cout<<endl;
+        //system("cls");
+        proveedores[codPP].activo = false;
+        ingresarProv(cod);
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
+
+void buscarProv()
+{
+    int op, cod, codP, p = 0;
+    int codPP;
+
+    //Para opcion de busqueda;
+    string texto, nombre;
+    size_t posicion;
+
+    system("cls");
+    cout<<"Buscar Clientes"<<endl;
+    cout<<"1.) Por Codigo de Proveedor"<<endl;
+    cout<<"2.) Por NIT de Proveedor"<<endl;
+    cout<<"3.) Por Nombre de Proveedor"<<endl;
+    cout<<"4.) Por Direccion de Proveedor"<<endl;
+    cout<<"5.) Cancelar"<<endl<<endl;
+    cout<<"Seleccione una opcion de busqueda: ";
+    cin>>op;
+    switch (op)
+    {
+        case 1: //por codigo
+            system("cls");
+            cout<<"Ingrese codigo de Proveedor: ";
+            cin>>cod;
+            codPP = generarCodProv(cod);
+            cout<<endl;
+            if(proveedores[codPP].activo == true)
+            {
+                mostrarProv(codPP);
+                system("pause");
+            }
+            else
+            {
+                system("cls");
+                cout<<"Codigo no Existente"<<endl;
+                system("pause");
+            }
+        break;
+    
+        case 2: //por nit
+            system("cls");
+            cout<<"Ingrese NIT de Proveedor: ";
+            cin>>codP;
+            cout<<endl;
+            system("cls");
+            for(int x = 1; x <= 100; x++)
+            {
+                if(proveedores[x].nit == codP)
+                {
+                    mostrarProv(x);
+                    p += 1;
+                }
+            }
+            if (p == 0)
+            {
+                cout<<"NIT no existente"<<endl;
+            }
+            system("pause");
+        break;
+
+        case 3: //nombre
+            system("cls");
+            cout<<"Ingrese nombre a buscar: ";
+            cin>>nombre;
+            for(int x = 1; x <= 100; x++)
+            {
+                texto = proveedores[x].nombre;
+                posicion = texto.find(nombre);
+
+                if(posicion != string::npos)
+                {
+                    system("cls");
+                    cout<<"Datos Encontrados: "<<endl;
+                    mostrarProv(x);
+                }
+            }
+            system("pause");
+        break;
+
+        case 4:
+            system("cls");
+            cout<<"Ingrese Direccion a buscar: ";
+            cin>>nombre;
+            for(int x = 1; x <= 100; x++)
+            {
+                texto = proveedores[x].direccion;
+                posicion = texto.find(nombre);
+
+                if(posicion != string::npos)
+                {
+                    system("cls");
+                    cout<<"Datos Encontrados: "<<endl;
+                    mostrarProv(x);
+                }
+            }
+            system("pause");
+        break;
+
+        default:
+        break;
+    }
+}
+
+void eliminarProv()
+{
+    int cod, codd, op;
+    system("cls");
+    cout<<"Ingrese el codigo del Proveedor que desea eliminar: ";
+    cin>>codd;
+    cod = generarCodProv(codd);
+    if(proveedores[cod].activo == true)
+    { 
+        cout<<"Estos son los datos actuales del Proveedor: "<<endl<<endl;
+        mostrarProv(cod);
+        cout<<endl<<"Esta seguro de eliminar este Proveedor? (1 = si, 2 = no): ";
+        cin>>op;
+        if(op == 1)
+        {
+            proveedores[cod].activo = false;
+            system("cls");
+            cout<<"Proveedor Eliminado Exitosamente"<<endl;
+            system("pause");
+        }
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
+
+void verProv()
+{
+    system("cls");
+    for(int x = 1; x <= 100; x++)
+    {
+        if(proveedores[x].activo == true)
+        {
+            mostrarProv(x);
+        }
+    }
+    system("pause");
+}
+
 //Metodos de Articulos
 void mostrarArticulo(int cod)
 {
@@ -286,27 +543,61 @@ void mostrarArticulo(int cod)
     //cout<<"Activo?: "<<articulos[cod].activo<<endl<<endl;
 }
 
-void ingresarArticulos(int cod) //Pendientes, hacer lo del codigo del proveedor
+void ingresarArticulos(int cod)
 {
+    int codp, codpp, op;
+    bool c = true;
     if(articulos[cod].activo == false) //queda mejor con un if
     {
-        articulos[cod].activo = true;
-        articulos[cod].codigo = cod;
         cout<<"Ingrese Codigo de Proveedor: ";
-        cin>>articulos[cod].codProveedor;
-        cout<<"Ingrese Nombre del Producto: ";
-        fflush(stdin); //Sepa, pero sin esta linea no funciona el cin.getline xd
-        cin.getline(articulos[cod].nombre, 100); //Para que se pueda ingresar cadenas de texto con espacios
-        cout<<"Ingrese la Cantidad en Tienda: ";
-        cin>>articulos[cod].cantidadTienda;
-        cout<<"Ingrese la Cantidad en Bodega: ";
-        cin>>articulos[cod].cantidadBodega;
-        cout<<"Ingrese el Precio: ";
-        cin>>articulos[cod].precio;
-        system("cls");
-        cout<<"Este es el articulo: "<<endl<<endl;
-        mostrarArticulo(cod);
-        system("pause");
+        cin>>codpp;
+        while(c == true)
+        {
+            codp = generarCodProv(codpp);
+            if(existeProv(codpp) == true)
+            {
+                system("cls");
+                cout<<"Codigo de Producto: "<<cod<<endl;
+                cout<<"Codigo de Proveedor: "<<proveedores[codp].codigo<<endl;
+                cout<<"Nombre del Proveedor: "<<proveedores[codp].nombre<<endl;
+                cout<<"Ingrese Nombre del Producto: ";
+                fflush(stdin); //Sepa, pero sin esta linea no funciona el cin.getline xd
+                cin.getline(articulos[cod].nombre, 100); //Para que se pueda ingresar cadenas de texto con espacios
+                cout<<"Ingrese la Cantidad en Tienda: ";
+                cin>>articulos[cod].cantidadTienda;
+                cout<<"Ingrese la Cantidad en Bodega: ";
+                cin>>articulos[cod].cantidadBodega;
+                cout<<"Ingrese el Precio: ";
+                cin>>articulos[cod].precio;
+                articulos[cod].codProveedor = codpp;
+                articulos[cod].activo = true;
+                articulos[cod].codigo = cod;
+                system("cls");
+                cout<<"Este es el articulo: "<<endl<<endl;
+                mostrarArticulo(cod);
+                system("pause");
+                c = false; //termina ciclo;
+            }
+            else
+            {
+                system("cls");
+                cout<<"Proveedor no existe, desea crearlo? (1 = si, 2 = no): ";
+                cin>>op;
+                switch (op)
+                {
+                    case 1:
+                        ingresarProv(codpp);
+                    break;
+
+                    case 2:
+                        c = false;
+                    break;
+                
+                    default:
+                    break;
+                }
+            }
+        }
     }
     else
     {
@@ -733,246 +1024,6 @@ void verClientes()
         if(clientes[x].activo == true)
         {
             mostrarCliente(x);
-        }
-    }
-    system("pause");
-}
-
-//Metodos de Proveedores
-int generarCodProv(int cod) //Esta funcion recibiara el codigo del proveedor y devolvera su valor en el array
-{
-    for(int x = 1; x <= 100; x++)
-    {
-        if(proveedores[x].codigo == cod)
-        {
-            return x;
-            break;
-        }
-    }
-}
-
-int arrayProv() //Esta funcion devolvera el numero del array mas cercano que este vacio.
-{
-    for(int x = 1; x <= 100; x++)
-    {
-        if(proveedores[x].activo == false)
-        {
-            return x;
-            break;
-        }
-    }
-}
-
-void mostrarProv(int cod)
-{
-    cout<<"Codigo de Proveedor: "<<proveedores[cod].codigo<<endl;
-    cout<<"Nombre de Proveedor: "<<proveedores[cod].nombre<<endl;
-    cout<<"Direccion de Proveedor: "<<proveedores[cod].direccion<<endl;
-    cout<<"Nit de Proveedor: "<<proveedores[cod].nit<<endl;
-    cout<<"Telefono de Proveedor: "<<proveedores[cod].telefono<<endl<<endl;
-}
-
-void ingresarProv(int codd)
-{
-    int cod;
-    cod = arrayProv();
-    if(proveedores[cod].activo == false) //queda mejor con un if
-    {
-        proveedores[cod].activo = true;
-        proveedores[cod].codigo = codd;
-        cout<<"Ingrese Nombre del Proveedor: ";
-        fflush(stdin);
-        cin.getline(proveedores[cod].nombre, 100);
-        cout<<"Ingrese la Direccion: ";
-        fflush(stdin);
-        cin.getline(proveedores[cod].direccion, 100);
-        cout<<"Ingrese el Nit: ";
-        cin>>proveedores[cod].nit;
-        cout<<"Ingrese el Telefono: ";
-        cin>>proveedores[cod].telefono;
-        system("cls");
-        cout<<"Este es el Proveedor: "<<endl<<endl;
-        mostrarProv(cod);
-        system("pause");
-    }
-    else
-    {
-        system("cls");
-        cout<<"Codigo ya Existente, ingrese uno diferente."<<endl;
-        system("pause");
-    }
-}
-
-void modificarProv()
-{
-    int cod, codPP;
-    system("cls");
-
-    system("cls");
-    cout<<"Ingrese el codigo del proveedor que desea modificar: ";
-    cin>>cod;
-    codPP = generarCodProv(cod);
-    cout<<codPP<<endl;
-    system("pause");
-    if(proveedores[codPP].activo == true)
-    { 
-        cout<<"Estos son los datos actuales del Proveedor: "<<endl<<endl;
-        mostrarProv(codPP);
-        cout<<endl;
-        system("pause");
-        cout<<endl;
-        //system("cls");
-        proveedores[codPP].activo = false;
-        ingresarProv(cod);
-    }
-    else
-    {
-        system("cls");
-        cout<<"Codigo no Existente"<<endl;
-        system("pause");
-    }
-}
-
-void buscarProv()
-{
-    int op, cod, codP, p = 0;
-    int codPP;
-
-    //Para opcion de busqueda;
-    string texto, nombre;
-    size_t posicion;
-
-    system("cls");
-    cout<<"Buscar Clientes"<<endl;
-    cout<<"1.) Por Codigo de Proveedor"<<endl;
-    cout<<"2.) Por NIT de Proveedor"<<endl;
-    cout<<"3.) Por Nombre de Proveedor"<<endl;
-    cout<<"4.) Por Direccion de Proveedor"<<endl;
-    cout<<"5.) Cancelar"<<endl<<endl;
-    cout<<"Seleccione una opcion de busqueda: ";
-    cin>>op;
-    switch (op)
-    {
-        case 1: //por codigo
-            system("cls");
-            cout<<"Ingrese codigo de Proveedor: ";
-            cin>>cod;
-            codPP = generarCodProv(cod);
-            cout<<endl;
-            if(proveedores[codPP].activo == true)
-            {
-                mostrarProv(codPP);
-                system("pause");
-            }
-            else
-            {
-                system("cls");
-                cout<<"Codigo no Existente"<<endl;
-                system("pause");
-            }
-        break;
-    
-        case 2: //por nit
-            system("cls");
-            cout<<"Ingrese NIT de Proveedor: ";
-            cin>>codP;
-            cout<<endl;
-            system("cls");
-            for(int x = 1; x <= 100; x++)
-            {
-                if(proveedores[x].nit == codP)
-                {
-                    mostrarProv(x);
-                    p += 1;
-                }
-            }
-            if (p == 0)
-            {
-                cout<<"NIT no existente"<<endl;
-            }
-            system("pause");
-        break;
-
-        case 3: //nombre
-            system("cls");
-            cout<<"Ingrese nombre a buscar: ";
-            cin>>nombre;
-            for(int x = 1; x <= 100; x++)
-            {
-                texto = proveedores[x].nombre;
-                posicion = texto.find(nombre);
-
-                if(posicion != string::npos)
-                {
-                    system("cls");
-                    cout<<"Datos Encontrados: "<<endl;
-                    mostrarProv(x);
-                }
-            }
-            system("pause");
-        break;
-
-        case 4:
-            system("cls");
-            cout<<"Ingrese Direccion a buscar: ";
-            cin>>nombre;
-            for(int x = 1; x <= 100; x++)
-            {
-                texto = proveedores[x].direccion;
-                posicion = texto.find(nombre);
-
-                if(posicion != string::npos)
-                {
-                    system("cls");
-                    cout<<"Datos Encontrados: "<<endl;
-                    mostrarProv(x);
-                }
-            }
-            system("pause");
-        break;
-
-        default:
-        break;
-    }
-}
-
-void eliminarProv()
-{
-    int cod, codd, op;
-    system("cls");
-    cout<<"Ingrese el codigo del Proveedor que desea eliminar: ";
-    cin>>codd;
-    cod = generarCodProv(codd);
-    if(proveedores[cod].activo == true)
-    { 
-        cout<<"Estos son los datos actuales del Proveedor: "<<endl<<endl;
-        mostrarProv(cod);
-        cout<<endl<<"Esta seguro de eliminar este Proveedor? (1 = si, 2 = no): ";
-        cin>>op;
-        if(op == 1)
-        {
-            proveedores[cod].activo = false;
-            system("cls");
-            cout<<"Proveedor Eliminado Exitosamente"<<endl;
-            system("pause");
-        }
-    }
-    else
-    {
-        system("cls");
-        cout<<"Codigo no Existente"<<endl;
-        system("pause");
-    }
-}
-
-void verProv()
-{
-    system("cls");
-    for(int x = 1; x <= 100; x++)
-    {
-        if(proveedores[x].activo == true)
-        {
-            mostrarProv(x);
         }
     }
     system("pause");
