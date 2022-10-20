@@ -55,6 +55,15 @@ struct emp //empleados
 
 }empleados[100];
 
+void gotoxy(int x,int y){  
+	HANDLE hcon;  
+    hcon = GetStdHandle(STD_OUTPUT_HANDLE);  
+    COORD dwPos; 
+    dwPos.X = x;  
+    dwPos.Y= y;  
+    SetConsoleCursorPosition(hcon,dwPos);  
+}
+
 void generarDatos() //Esta Funcion sirve para Generar los datos base, se generaran 15 array por estructura
 {
     //Datos de Articulos
@@ -1020,6 +1029,29 @@ void verClientes()
 }
 
 //Metodos de Empleados
+int generarCodEmpleado(int cod) //Esta funcion recibiara el codigo del empleado y devolvera su valor en el array
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(empleados[x].codigo == cod)
+        {
+            return x;
+            break;
+        }
+    }
+}
+
+int arrayEmpleados() //Esta funcion devolvera el numero del array mas cercano que este vacio.
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(empleados[x].activo == false)
+        {
+            return x;
+            break;
+        }
+    }
+}
 void mostrarEmpleados(int cod)
 {
     cout<<"Codigo de Empleados: "<<empleados[cod].codigo<<endl;
@@ -1027,12 +1059,14 @@ void mostrarEmpleados(int cod)
     cout<<"Puesto de Empleados: "<<empleados[cod].puesto<<endl<<endl;
 }
 
-void ingresarEmpleados(int cod)
+void ingresarEmpleados(int codd)
 {
+	int cod;
+	cod = arrayEmpleados();
     if(empleados[cod].activo == false) //queda mejor con un if
     {
         empleados[cod].activo = true;
-        empleados[cod].codigo = cod;
+        empleados[cod].codigo = codd;
         cout<<"Ingrese Nombre del Empleado: ";
         fflush(stdin); //Sepa, pero sin esta linea no funciona el cin.getline xd
         cin.getline(empleados[cod].nombre, 100);
@@ -1172,6 +1206,125 @@ void verEmpleados()
         }
     }
     system("pause");
+}
+
+//6. REPORTES
+void reporteArtBodega(){
+	system("cls");
+	gotoxy(40,0); cout<<"REPORTE DE ARTICULOS EN BODEGA";
+	gotoxy(5,2); cout<<"DESCRIPCION";
+	gotoxy(40, 2); cout<<"CANTIDAD EN BODEGA";
+	gotoxy(50,2); cout<<"PRECIO UNITARIO";
+	gotoxy(100,2); cout<<"PRECIO TOTAL";
+	
+	for (int x=0; x <101; x++){
+		if (articulos[x].cantidadBodega > 0){
+			int y= 3;
+			for (int i = 0; i< x; i++){
+			gotoxy(5, y); cout<<articulos[i].nombre;
+			gotoxy(25, y); cout<<articulos[i].cantidadBodega;
+			gotoxy(50, y); cout<<"Q. "<<articulos[i].precio;
+			gotoxy(100, y); cout<<"Q. "<<articulos[i].precio * articulos[i].cantidadBodega;
+			y++;
+			}
+		}
+	
+	}
+	getch();
+}
+
+void reporteArtTienda(){
+	system("cls");
+	gotoxy(40,0); cout<<"REPORTE DE ARTICULOS EN TIENDA";
+	gotoxy(5,2); cout<<"DESCRIPCION";
+	gotoxy(40, 2); cout<<"CANTIDAD EN TIENDA";
+	gotoxy(50,2); cout<<"PRECIO UNITARIO";
+	gotoxy(100,2); cout<<"PRECIO TOTAL";
+	
+	for (int x=0; x <101; x++){
+		if (articulos[x].cantidadTienda > 0){
+			int y= 3;
+			for (int i = 0; i< x; i++){
+			gotoxy(5, y); cout<<articulos[i].nombre;
+			gotoxy(25, y); cout<<articulos[i].cantidadTienda;
+			gotoxy(50, y); cout<<"Q. "<<articulos[i].precio;
+			gotoxy(100, y); cout<<"Q. "<<articulos[i].precio * articulos[i].cantidadTienda;
+			y++;
+			}
+		}
+	
+	}
+	getch();
+}
+void reporteClientes(){
+	system("cls");
+	gotoxy(40,0); cout<<"REPORTE DE ARTICULOS DE CLIENTES";
+	gotoxy(5,2); cout<<"NOMBRE";
+	gotoxy(40, 2); cout<<"DIRECCION";
+	gotoxy(50,2); cout<<"NIT";
+	gotoxy(100,2); cout<<"CODIGO";
+	
+	for (int x=0; x <101; x++){
+		if (clientes[x].codigo > 0){
+			int y= 3;
+			for (int i = 0; i< x; i++){
+			gotoxy(5, y); cout<<clientes[i].nombre;
+			gotoxy(25, y); cout<<clientes[i].direccion;
+			gotoxy(50, y); cout<<clientes[i].nit;
+			gotoxy(100, y); cout<<clientes[i].codigo;
+			y++;
+			}
+		}
+	
+	}
+	getch();
+}
+
+void reporteProveedores(){
+	system("cls");
+	gotoxy(40,0); cout<<"REPORTE DE ARTICULOS DE PROVEEDORES";
+	gotoxy(5,2); cout<<"NOMBRE";
+	gotoxy(40, 2); cout<<"DIRECCION";
+	gotoxy(50,2); cout<<"NIT";
+	gotoxy(100,2); cout<<"CODIGO";
+	
+	for (int x=00; x <100; x++){
+		if (proveedores[x].codigo > 0){
+			int y= 3;
+			for (int i = 0; i< x; i++){
+			gotoxy(5, y); cout<<proveedores[i].nombre;
+			gotoxy(25, y); cout<<proveedores[i].direccion;
+			gotoxy(50, y); cout<<proveedores[i].nit;
+			gotoxy(100, y); cout<<proveedores[i].codigo;
+			y++;
+			}
+		}
+	
+	}
+	getch();
+}
+
+void reporteEmpleados(){
+	system("cls");
+	gotoxy(40,0); cout<<"REPORTE DE EMPLEADOS";
+	gotoxy(5,2); cout<<"NOMBRE";
+	gotoxy(40, 2); cout<<"DIRECCION";
+	gotoxy(50,2); cout<<"NIT";
+	gotoxy(100,2); cout<<"CODIGO";
+	
+	for (int x=0; x <101; x++){
+		if (empleados[x].codigo > 0){
+			int y= 3;
+			for (int i = 0; i< x; i++){
+			gotoxy(5, y); cout<<empleados[i].nombre;
+			gotoxy(45, y); cout<<empleados[i].puesto;
+			gotoxy(60, y); cout<<empleados[i].codigo;
+			y++;
+			}
+		}
+	
+	}
+	getch();
 }
 
 main()
@@ -1420,23 +1573,34 @@ main()
                 {
                     case 1:
                     break;
-
+					
                     case 2:
                     break;
-
+					
+					//articulos en bodega
                     case 3:
+                    	reporteArtBodega();
                     break;
+                    
+                    //articulos en Tienda
 
                     case 4:
+                    	reporteArtTienda();
                     break;
-
+					
+					//clientes registrados
                     case 5:
+                    	reporteClientes();
                     break;
-
+					
+					//Proveedores
                     case 6:
+                    	reporteProveedores();
                     break;
-
+					
+					//Empleados
                     case 7:
+                    	reporteEmpleados();
                     break;
 
                     case 8:
