@@ -711,6 +711,19 @@ int generarCodProv(int cod) //Esta funcion recibiara el codigo del proveedor y d
         if(proveedores[x].codigo == cod)
         {
             return x;
+            break;
+        }
+    }
+}
+
+int arrayProv() //Esta funcion devolvera el numero del array mas cercano que este vacio.
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(proveedores[x].activo == false)
+        {
+            return x;
+            break;
         }
     }
 }
@@ -727,13 +740,10 @@ void mostrarProv(int cod)
 void ingresarProv(int codd)
 {
     int cod;
-    cod = generarCodProv(codd);
-    cout<<cod<<endl;
-    system("pause");
+    cod = arrayProv();
     if(proveedores[cod].activo == false) //queda mejor con un if
     {
         proveedores[cod].activo = true;
-        //pendiente, hacer ciclo para encontrar array disponible para guardar codigo de proveedor
         proveedores[cod].codigo = codd;
         cout<<"Ingrese Nombre del Proveedor: ";
         fflush(stdin);
@@ -760,17 +770,24 @@ void ingresarProv(int codd)
 
 void modificarProv()
 {
-    int cod;
+    int cod, codPP;
     system("cls");
-    cout<<"Ingrese el codigo del cliente que desea modificar: ";
+
+    system("cls");
+    cout<<"Ingrese el codigo del proveedor que desea modificar: ";
     cin>>cod;
-    if(proveedores[cod].activo == true)
+    codPP = generarCodProv(cod);
+    cout<<codPP<<endl;
+    system("pause");
+    if(proveedores[codPP].activo == true)
     { 
-        cout<<"Estos son los datos actuales del cliente: "<<endl<<endl;
-        mostrarProv(cod);
+        cout<<"Estos son los datos actuales del Proveedor: "<<endl<<endl;
+        mostrarProv(codPP);
+        cout<<endl;
         system("pause");
+        cout<<endl;
         //system("cls");
-        proveedores[cod].activo = false;
+        proveedores[codPP].activo = false;
         ingresarProv(cod);
     }
     else
@@ -886,10 +903,11 @@ void buscarProv()
 
 void eliminarProv()
 {
-    int cod, op;
+    int cod, codd, op;
     system("cls");
     cout<<"Ingrese el codigo del Proveedor que desea eliminar: ";
-    cin>>cod;
+    cin>>codd;
+    cod = generarCodProv(codd);
     if(proveedores[cod].activo == true)
     { 
         cout<<"Estos son los datos actuales del Proveedor: "<<endl<<endl;
@@ -1064,7 +1082,7 @@ main()
                 cout<<"3.) Buscar"<<endl;
                 cout<<"4.) Eliminar"<<endl;
                 cout<<"5.) Ver todo"<<endl;
-                cout<<"5.) Regresar"<<endl<<endl;
+                cout<<"6.) Regresar"<<endl<<endl;
                 cout<<"Seleccione una opcion: ";
                 cin>>op1;
                 switch (op1)
