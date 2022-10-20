@@ -8,7 +8,6 @@
 using namespace std;
 
 /*Pendientes
-    Hacer que no se puedan ingresar codigos repetidos /////////yo si puede gei jeje
     hacer la parte del provedor para que cuando no concida el codigo del proveedor cree uno nuevo, ya que deve existir el proveedor para ingresar el articulo.
     No se muestran bien los acentos, corregir
     Que se pueda modificar codigo de producto en funcion modificarArticulos
@@ -48,7 +47,14 @@ struct prov
     bool activo = false;
 }proveedores[100];
 
+struct emp //empleados
+{
+    int codigo = 0;
+    char nombre[100];
+    char puesto[100];
+    bool activo = false;
 
+}empleados[100];
 
 void generarDatos() //Esta Funcion sirve para Generar los datos base, se generaran 15 array por estructura
 {
@@ -237,6 +243,26 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     proveedores[5].nit = 667854233;
     proveedores[5].telefono = 90904500;
     proveedores[5].activo = true;
+
+    empleados[1].codigo = 1;
+    strcpy(empleados[1].nombre, "Alberto Monroy" );
+    strcpy(empleados[1].puesto, "Cajero" );
+    empleados[1].activo = true;
+
+    empleados[2].codigo = 2;
+    strcpy(empleados[2].nombre, "Roberto Ramirez" );
+    strcpy(empleados[2].puesto, "Cajero" );
+    empleados[2].activo = true;
+
+    empleados[3].codigo = 3;
+    strcpy(empleados[3].nombre, "Mynor Osorio" );
+    strcpy(empleados[3].puesto, "Cajero" );
+    empleados[3].activo = true;
+
+    empleados[4].codigo = 4;
+    strcpy(empleados[4].nombre, "Juan Gutierrez" );
+    strcpy(empleados[4].puesto, "Cajero" );
+    empleados[4].activo = true;
 }
 
 //Metodos de Articulos
@@ -943,6 +969,161 @@ void verProv()
     system("pause");
 }
 
+//Metodos de Empleados
+void mostrarEmpleados(int cod)
+{
+    cout<<"Codigo de Empleados: "<<empleados[cod].codigo<<endl;
+    cout<<"Nombre de Empleados: "<<empleados[cod].nombre<<endl;
+    cout<<"Puesto de Empleados: "<<empleados[cod].puesto<<endl<<endl;
+}
+
+void ingresarEmpleados(int cod)
+{
+    if(empleados[cod].activo == false) //queda mejor con un if
+    {
+        empleados[cod].activo = true;
+        empleados[cod].codigo = cod;
+        cout<<"Ingrese Nombre del Empleado: ";
+        fflush(stdin); //Sepa, pero sin esta linea no funciona el cin.getline xd
+        cin.getline(empleados[cod].nombre, 100);
+        cout<<"Ingrese el Puesto del Empleado: ";
+        cin>>empleados[cod].puesto;
+        system("cls");
+        cout<<"Este es el Empleado: "<<endl<<endl;
+        mostrarEmpleados(cod);
+        system("pause");
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo ya Existente, ingrese uno diferente."<<endl;
+        system("pause");
+    }
+}
+
+void modificarEmpleados()
+{
+    int cod;
+    system("cls");
+    cout<<"Ingrese el codigo del Empleado que desea modificar: ";
+    cin>>cod;
+    if(empleados[cod].activo == true)
+    { 
+        cout<<"Estos son los datos actuales del Empleado: "<<endl<<endl;
+        mostrarEmpleados(cod);
+        system("pause");
+        //system("cls");
+        empleados[cod].activo = false;
+        ingresarEmpleados(cod);
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
+
+void buscarEmpleados()
+{
+    int op, cod, codP, p = 0;
+
+    //Para opcion de busqueda;
+    string texto, nombre;
+    size_t posicion;
+
+    system("cls");
+    cout<<"Buscar Clientes"<<endl;
+    cout<<"1.) Por Codigo de Empleados"<<endl;
+    cout<<"2.) Por Nombre de Empleados"<<endl;
+    cout<<"3.) Cancelar"<<endl<<endl;
+    cout<<"Seleccione una opcion de busqueda: ";
+    cin>>op;
+    switch (op)
+    {
+        case 1: //por codigo
+            system("cls");
+            cout<<"Ingrese codigo del empleado: ";
+            cin>>cod;
+            cout<<endl;
+            if(empleados[cod].activo == true)
+            {
+                mostrarEmpleados(cod); 
+                system("pause");
+            }
+            else
+            {
+                system("cls");
+                cout<<"Codigo no Existente"<<endl;
+                system("pause");
+            }
+        break;
+    
+        case 2:
+            system("cls");
+            cout<<"Ingrese nombre a buscar: ";
+            cin>>nombre;
+            for(int x = 1; x <= 100; x++)
+            {
+                texto = empleados[x].nombre;
+                posicion = texto.find(nombre);
+
+                if(posicion != string::npos)
+                {
+                    system("cls");
+                    cout<<"Datos Encontrados: "<<endl;
+                    mostrarEmpleados(x);
+                }
+            }
+            system("pause");
+        break;
+
+        default:
+        break;
+    }
+}
+
+void eliminarEmpleados()
+{
+    int cod, op;
+    system("cls");
+    cout<<"Ingrese el codigo del Empleado que desea eliminar: ";
+    cin>>cod;
+    if(empleados[cod].activo == true)
+    { 
+        cout<<"Estos son los datos actuales del Empleado: "<<endl<<endl;
+        mostrarEmpleados(cod);
+        cout<<endl<<"Esta seguro de eliminar este Empleado? (1 = si, 2 = no): ";
+        cin>>op;
+        if(op == 1)
+        {
+            empleados[cod].activo = false;
+            system("cls");
+            cout<<"Empleado Eliminado Exitosamente"<<endl;
+            system("pause");
+        }
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
+
+void verEmpleados()
+{
+    system("cls");
+    for(int x = 1; x <= 100; x++)
+    {
+        if(empleados[x].activo == true)
+        {
+            mostrarEmpleados(x);
+        }
+    }
+    system("pause");
+}
+
 main()
 {
     int opcion, op1, cod;
@@ -1130,24 +1311,38 @@ main()
                 cout<<"2.) Modificar"<<endl;
                 cout<<"3.) Buscar"<<endl;
                 cout<<"4.) Eliminar"<<endl;
+                cout<<"5.) Ver Todo"<<endl;
                 cout<<"5.) Regresar"<<endl<<endl;
                 cout<<"Seleccione una opcion: ";
                 cin>>op1;
                 switch (op1)
                 {
                     case 1:
+                        system("cls");
+                        cout<<"SUPERTIENDA MAS+"<<endl<<endl;
+                        cout<<"Ingresar Empleados"<<endl;
+                        cout<<"Ingrese Codigo (1-100): ";
+                        cin>>cod;
+                        ingresarEmpleados(cod);
                     break;
 
                     case 2:
+                        modificarEmpleados();
                     break;
 
                     case 3:
+                        buscarEmpleados();
                     break;
 
                     case 4:
+                        eliminarEmpleados();
                     break;
 
                     case 5:
+                        verEmpleados();
+                    break;
+
+                    case 6:
                         repeticion = true;
                     break;
 
