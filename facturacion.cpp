@@ -1089,7 +1089,8 @@ void ingresarEmpleados(int codd)
         fflush(stdin); //Sepa, pero sin esta linea no funciona el cin.getline xd
         cin.getline(empleados[cod].nombre, 100);
         cout<<"Ingrese el Puesto del Empleado: ";
-        cin>>empleados[cod].puesto;
+        fflush(stdin); //Sepa, pero sin esta linea no funciona el cin.getline xd
+        cin.getline(empleados[cod].puesto, 100);
         system("cls");
         cout<<"Este es el Empleado: "<<endl<<endl;
         mostrarEmpleados(cod);
@@ -1284,73 +1285,72 @@ void reporteArtTienda(){
 }
 void reporteClientes(){
 	system("cls");
-	gotoxy(40,0); cout<<"REPORTE DE ARTICULOS DE CLIENTES";
-	gotoxy(5,2); cout<<"NOMBRE";
-	gotoxy(40, 2); cout<<"DIRECCION";
-	gotoxy(50,2); cout<<"NIT";
-	gotoxy(100,2); cout<<"CODIGO";
-	
-	for (int x=0; x <101; x++){
-		if (clientes[x].codigo > 0){
-			int y= 3;
-			for (int i = 0; i< x; i++){
-			gotoxy(5, y); cout<<clientes[i].nombre;
-			gotoxy(25, y); cout<<clientes[i].direccion;
-			gotoxy(50, y); cout<<clientes[i].nit;
-			gotoxy(100, y); cout<<clientes[i].codigo;
-			y++;
-			}
-		}
-	
-	}
-	getch();
+    int y = 4;
+	gotoxy(30,0); cout<<"LISTADO DE CLIENTES";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"NOMBRE";
+    gotoxy(50,2); cout<<"DIRECCION";
+    gotoxy(70, 2); cout<<"NIT";
+    for(int x = 1; x <= 100; x++)
+    {
+        if(clientes[x].activo == true)
+        {
+            gotoxy(5, y); cout<<clientes[x].codigo;
+            gotoxy(15, y); cout<<clientes[x].nombre;
+            gotoxy(50, y); cout<<clientes[x].direccion;
+            gotoxy(70, y); cout<<clientes[x].nit;
+            y+=1;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
 }
 
 void reporteProveedores(){
 	system("cls");
-	gotoxy(40,0); cout<<"REPORTE DE ARTICULOS DE PROVEEDORES";
-	gotoxy(5,2); cout<<"NOMBRE";
-	gotoxy(40, 2); cout<<"DIRECCION";
-	gotoxy(50,2); cout<<"NIT";
-	gotoxy(100,2); cout<<"CODIGO";
-	
-	for (int x=00; x <100; x++){
-		if (proveedores[x].codigo > 0){
-			int y= 3;
-			for (int i = 0; i< x; i++){
-			gotoxy(5, y); cout<<proveedores[i].nombre;
-			gotoxy(25, y); cout<<proveedores[i].direccion;
-			gotoxy(50, y); cout<<proveedores[i].nit;
-			gotoxy(100, y); cout<<proveedores[i].codigo;
-			y++;
-			}
-		}
-	
-	}
-	getch();
+    int y = 4, codP;
+	gotoxy(35,0); cout<<"REPORTE DE PROVEEDORES";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"NOMBRE";
+    gotoxy(50,2); cout<<"DIRECCION";
+    gotoxy(70, 2); cout<<"TELEFONO";
+    gotoxy(90,2); cout<<"NIT";
+    for(int x = 1; x <= 100; x++)
+    {
+        if(proveedores[x].activo == true)
+        {
+            codP = generarCodProv(proveedores[x].codigo);
+            gotoxy(5, y); cout<<proveedores[x].codigo;
+            gotoxy(15, y); cout<<proveedores[codP].nombre;
+            gotoxy(50, y); cout<<proveedores[x].direccion;
+            gotoxy(70, y); cout<<proveedores[x].telefono;
+            gotoxy(90, y); cout<<proveedores[x].nit;
+            y+=1;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
 }
 
 void reporteEmpleados(){
 	system("cls");
-	gotoxy(40,0); cout<<"REPORTE DE EMPLEADOS";
-	gotoxy(5,2); cout<<"NOMBRE";
-	gotoxy(40, 2); cout<<"DIRECCION";
-	gotoxy(50,2); cout<<"NIT";
-	gotoxy(100,2); cout<<"CODIGO";
-	
-	for (int x=0; x <101; x++){
-		if (empleados[x].codigo > 0){
-			int y= 3;
-			for (int i = 0; i< x; i++){
-			gotoxy(5, y); cout<<empleados[i].nombre;
-			gotoxy(45, y); cout<<empleados[i].puesto;
-			gotoxy(60, y); cout<<empleados[i].codigo;
-			y++;
-			}
-		}
-	
-	}
-	getch();
+    int y = 4;
+	gotoxy(18,0); cout<<"REPORTE DE EMPLEADOS";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"NOMBRE";
+    gotoxy(40,2); cout<<"PUESTO";
+    for(int x = 1; x <= 100; x++)
+    {
+        if(empleados[x].activo == true)
+        {
+            gotoxy(5, y); cout<<empleados[x].codigo;
+            gotoxy(15, y); cout<<empleados[x].nombre;
+            gotoxy(40, y); cout<<empleados[x].puesto;
+            y+=1;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
 }
 
 main()
