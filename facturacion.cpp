@@ -77,7 +77,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
 
     articulos[2].codigo = 2;
     articulos[2].codProveedor = 400;
-    strcpy(articulos[2].nombre, "Consomé");
+    strcpy(articulos[2].nombre, "Consome");
     articulos[2].cantidadTienda = 30;
     articulos[2].cantidadBodega = 100;
     articulos[2].precio = 30.45;
@@ -93,7 +93,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
 
     articulos[4].codigo = 4;
     articulos[4].codProveedor = 400;
-    strcpy(articulos[4].nombre, "Puré de tomate");
+    strcpy(articulos[4].nombre, "Pure de tomate");
     articulos[4].cantidadTienda = 60;
     articulos[4].cantidadBodega = 200;
     articulos[4].precio = 14.69;
@@ -101,7 +101,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
 
     articulos[5].codigo = 5;
     articulos[5].codProveedor = 400;
-    strcpy(articulos[5].nombre, "Alimento para bebés");
+    strcpy(articulos[5].nombre, "Alimento para bebes");
     articulos[5].cantidadTienda = 49;
     articulos[5].cantidadBodega = 600;
     articulos[5].precio = 50;
@@ -125,7 +125,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
 
     articulos[8].codigo = 8;
     articulos[8].codProveedor = 100;
-    strcpy(articulos[8].nombre, "Azúcar");
+    strcpy(articulos[8].nombre, "Azucar");
     articulos[8].cantidadTienda = 30;
     articulos[8].cantidadBodega = 90;
     articulos[8].precio = 5.5;
@@ -133,7 +133,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
 
     articulos[9].codigo = 9;
     articulos[9].codProveedor = 200;
-    strcpy(articulos[9].nombre, "Chile piquín");
+    strcpy(articulos[9].nombre, "Chile piquin");
     articulos[9].cantidadTienda = 3;
     articulos[9].cantidadBodega = 21;
     articulos[9].precio = 13.5;
@@ -632,13 +632,31 @@ void modificarArticulos()
 void verArticulos()
 {
     system("cls");
+    int y = 4, codP;
+	gotoxy(70,0); cout<<"REPORTE DE ARTICULOS";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"DESCRIPCION";
+    gotoxy(50,2); cout<<"PRECIO UNITARIO";
+	gotoxy(70, 2); cout<<"CANT. TIENDA";
+    gotoxy(90, 2); cout<<"CANT. BODEGA";
+    gotoxy(110,2); cout<<"COD. PROV";
+    gotoxy(125,2); cout<<"NOMBRE DE PROVEEDOR";
     for(int x = 1; x <= 100; x++)
     {
         if(articulos[x].activo == true)
         {
-            mostrarArticulo(x);
+            codP = generarCodProv(articulos[x].codProveedor);
+            gotoxy(5, y); cout<<articulos[x].codigo;
+            gotoxy(15, y); cout<<articulos[x].nombre;
+            gotoxy(50, y); cout<<"Q. "<<articulos[x].precio;
+			gotoxy(70, y); cout<<articulos[x].cantidadTienda;
+            gotoxy(90, y); cout<<articulos[x].cantidadBodega;
+            gotoxy(110, y); cout<<"("<<articulos[x].codProveedor<<") ";
+			gotoxy(125, y); cout<<proveedores[codP].nombre;
+            y+=1;
         }
     }
+    cout<<endl<<endl;
     system("pause");
 }
 
@@ -1211,50 +1229,58 @@ void verEmpleados()
 //6. REPORTES
 void reporteArtBodega(){
 	system("cls");
-	gotoxy(40,0); cout<<"REPORTE DE ARTICULOS EN BODEGA";
-	gotoxy(5,2); cout<<"DESCRIPCION";
-	gotoxy(40, 2); cout<<"CANTIDAD EN BODEGA";
-	gotoxy(50,2); cout<<"PRECIO UNITARIO";
-	gotoxy(100,2); cout<<"PRECIO TOTAL";
-	
-	for (int x=0; x <101; x++){
-		if (articulos[x].cantidadBodega > 0){
-			int y= 3;
-			for (int i = 0; i< x; i++){
-			gotoxy(5, y); cout<<articulos[i].nombre;
-			gotoxy(25, y); cout<<articulos[i].cantidadBodega;
-			gotoxy(50, y); cout<<"Q. "<<articulos[i].precio;
-			gotoxy(100, y); cout<<"Q. "<<articulos[i].precio * articulos[i].cantidadBodega;
-			y++;
-			}
-		}
-	
-	}
-	getch();
+    int y = 4, codP;
+	gotoxy(60,0); cout<<"REPORTE DE ARTICULOS EN BODEGA";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"DESCRIPCION";
+    gotoxy(50,2); cout<<"PRECIO UNITARIO";
+    gotoxy(70, 2); cout<<"CANT. BODEGA";
+    gotoxy(90,2); cout<<"COD. PROV";
+    gotoxy(110,2); cout<<"NOMBRE DE PROVEEDOR";
+    for(int x = 1; x <= 100; x++)
+    {
+        if(articulos[x].activo == true && articulos[x].cantidadBodega > 0)
+        {
+            codP = generarCodProv(articulos[x].codProveedor);
+            gotoxy(5, y); cout<<articulos[x].codigo;
+            gotoxy(15, y); cout<<articulos[x].nombre;
+            gotoxy(50, y); cout<<"Q. "<<articulos[x].precio;
+            gotoxy(70, y); cout<<articulos[x].cantidadBodega;
+            gotoxy(90, y); cout<<"("<<articulos[x].codProveedor<<") ";
+			gotoxy(110, y); cout<<proveedores[codP].nombre;
+            y+=1;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
 }
 
 void reporteArtTienda(){
 	system("cls");
-	gotoxy(40,0); cout<<"REPORTE DE ARTICULOS EN TIENDA";
-	gotoxy(5,2); cout<<"DESCRIPCION";
-	gotoxy(40, 2); cout<<"CANTIDAD EN TIENDA";
-	gotoxy(50,2); cout<<"PRECIO UNITARIO";
-	gotoxy(100,2); cout<<"PRECIO TOTAL";
-	
-	for (int x=0; x <101; x++){
-		if (articulos[x].cantidadTienda > 0){
-			int y= 3;
-			for (int i = 0; i< x; i++){
-			gotoxy(5, y); cout<<articulos[i].nombre;
-			gotoxy(25, y); cout<<articulos[i].cantidadTienda;
-			gotoxy(50, y); cout<<"Q. "<<articulos[i].precio;
-			gotoxy(100, y); cout<<"Q. "<<articulos[i].precio * articulos[i].cantidadTienda;
-			y++;
-			}
-		}
-	
-	}
-	getch();
+    int y = 4, codP;
+	gotoxy(60,0); cout<<"REPORTE DE ARTICULOS EN TIENDA";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"DESCRIPCION";
+    gotoxy(50,2); cout<<"PRECIO UNITARIO";
+    gotoxy(70, 2); cout<<"CANT. TIENDA";
+    gotoxy(90,2); cout<<"COD. PROV";
+    gotoxy(110,2); cout<<"NOMBRE DE PROVEEDOR";
+    for(int x = 1; x <= 100; x++)
+    {
+        if(articulos[x].activo == true && articulos[x].cantidadTienda > 0)
+        {
+            codP = generarCodProv(articulos[x].codProveedor);
+            gotoxy(5, y); cout<<articulos[x].codigo;
+            gotoxy(15, y); cout<<articulos[x].nombre;
+            gotoxy(50, y); cout<<"Q. "<<articulos[x].precio;
+            gotoxy(70, y); cout<<articulos[x].cantidadTienda;
+            gotoxy(90, y); cout<<"("<<articulos[x].codProveedor<<") ";
+			gotoxy(110, y); cout<<proveedores[codP].nombre;
+            y+=1;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
 }
 void reporteClientes(){
 	system("cls");
