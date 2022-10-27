@@ -12,7 +12,7 @@ using namespace std;
     Que se pueda modificar codigo de producto en funcion modificarArticulos
     que pregunte si de verdad quiere modifcar el articulo
     hacer que tire mensaje de error cuando no encuentre buscando por nombre
-    Hacer que los datos se vean como en una tabla en la funcion verArticulos() con gotoxy
+    *Que no se puedan Ingresar Proveedores Repetidos(consultar las demas categorias)
     */
 
 struct art //articulos
@@ -328,7 +328,7 @@ void ingresarProv(int codd)
 {
     int cod;
     cod = arrayProv();
-    if(proveedores[cod].activo == false) //queda mejor con un if
+    if(proveedores[cod].activo == false && codd <= 1000 && codd >= 100) //queda mejor con un if
     {
         proveedores[cod].activo = true;
         proveedores[cod].codigo = codd;
@@ -345,6 +345,12 @@ void ingresarProv(int codd)
         system("cls");
         cout<<"Este es el Proveedor: "<<endl<<endl;
         mostrarProv(cod);
+        system("pause");
+    }
+    else if(codd > 1000 or codd < 100)
+    {
+        system("cls");
+        cout<<"Codigo Incorrecto, esta fuera de rango."<<endl;
         system("pause");
     }
     else
@@ -546,7 +552,7 @@ void ingresarArticulos(int cod)
 {
     int codp, codpp, op;
     bool c = true;
-    if(articulos[cod].activo == false) //queda mejor con un if
+    if(articulos[cod].activo == false && cod <=100 && cod > 0) //Para que codigo sea menor a 100
     {
         cout<<"Ingrese Codigo de Proveedor: ";
         cin>>codpp;
@@ -597,6 +603,12 @@ void ingresarArticulos(int cod)
                 }
             }
         }
+    }
+    else if(cod > 100 or cod == 0)
+    {
+        system("cls");
+        cout<<"Codigo Incorrecto, esta fuera de rango."<<endl;
+        system("pause");
     }
     else
     {
@@ -857,7 +869,7 @@ void mostrarCliente(int cod)
 
 void ingresarClientes(int cod)
 {
-    if(clientes[cod].activo == false) //queda mejor con un if
+    if(clientes[cod].activo == false && cod <= 100 && cod > 0) //queda mejor con un if
     {
         clientes[cod].activo = true;
         clientes[cod].codigo = cod;
@@ -871,6 +883,12 @@ void ingresarClientes(int cod)
         system("cls");
         cout<<"Este es el cliente: "<<endl<<endl;
         mostrarCliente(cod);
+        system("pause");
+    }
+    else if(cod > 100 or cod == 0)
+    {
+        system("cls");
+        cout<<"Codigo Incorrecto, esta fuera de rango."<<endl;
         system("pause");
     }
     else
@@ -1070,6 +1088,7 @@ int arrayEmpleados() //Esta funcion devolvera el numero del array mas cercano qu
         }
     }
 }
+
 void mostrarEmpleados(int cod)
 {
     cout<<"Codigo de Empleados: "<<empleados[cod].codigo<<endl;
@@ -1081,7 +1100,7 @@ void ingresarEmpleados(int codd)
 {
 	int cod;
 	cod = arrayEmpleados();
-    if(empleados[cod].activo == false) //queda mejor con un if
+    if(empleados[cod].activo == false && codd < 100 && codd > 0) //queda mejor con un if
     {
         empleados[cod].activo = true;
         empleados[cod].codigo = codd;
@@ -1094,6 +1113,12 @@ void ingresarEmpleados(int codd)
         system("cls");
         cout<<"Este es el Empleado: "<<endl<<endl;
         mostrarEmpleados(cod);
+        system("pause");
+    }
+    else if(codd > 100 or codd == 0)
+    {
+        system("cls");
+        cout<<"Codigo Incorrecto, esta fuera de rango."<<endl;
         system("pause");
     }
     else
