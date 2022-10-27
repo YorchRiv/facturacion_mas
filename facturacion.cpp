@@ -523,19 +523,6 @@ void eliminarProv()
     }
 }
 
-void verProv()
-{
-    system("cls");
-    for(int x = 1; x <= 100; x++)
-    {
-        if(proveedores[x].activo == true)
-        {
-            mostrarProv(x);
-        }
-    }
-    system("pause");
-}
-
 //Metodos de Articulos
 void mostrarArticulo(int cod)
 {
@@ -1051,19 +1038,6 @@ void eliminarClientes()
     }
 }
 
-void verClientes()
-{
-    system("cls");
-    for(int x = 1; x <= 100; x++)
-    {
-        if(clientes[x].activo == true)
-        {
-            mostrarCliente(x);
-        }
-    }
-    system("pause");
-}
-
 //Metodos de Empleados
 int generarCodEmpleado(int cod) //Esta funcion recibiara el codigo del empleado y devolvera su valor en el array
 {
@@ -1239,19 +1213,6 @@ void eliminarEmpleados()
     }
 }
 
-void verEmpleados()
-{
-    system("cls");
-    for(int x = 1; x <= 100; x++)
-    {
-        if(empleados[x].activo == true)
-        {
-            mostrarEmpleados(x);
-        }
-    }
-    system("pause");
-}
-
 //6. REPORTES
 void reporteArtBodega(){
 	system("cls");
@@ -1308,6 +1269,7 @@ void reporteArtTienda(){
     cout<<endl<<endl;
     system("pause");
 }
+
 void reporteClientes(){
 	system("cls");
     int y = 4;
@@ -1376,6 +1338,63 @@ void reporteEmpleados(){
     }
     cout<<endl<<endl;
     system("pause");
+}
+
+bool existeNit(int nit)
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(clientes[x].nit == nit)
+        {
+            return true;
+            break;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
+
+void facturacion()
+{
+    int nit, op, cod;
+    bool c = true;
+    while(c == true)
+    {
+        system("cls");
+        cout<<"BIENVENIDO AL SISTEMA DE FACTURACION"<<endl<<endl;
+        cout<<"Ingrese su nit: ";
+        cin>>nit;
+        if(existeNit(nit) == true)
+        {
+            cout<<"True"<<endl;
+            system("pause");
+        }
+        else
+        {
+            system("cls");
+            cout<<"No existe ningun cliente registrado con ese nit, Desea crear un nuevo usuario? (1 = Si, 2 = No): ";
+            cin>>op;
+            switch (op)
+            {
+                case 1:
+                    system("cls");
+                    cout<<"Ingresar Clientes"<<endl;
+                    cout<<"Ingrese Codigo (1-100): ";
+                    cin>>cod;
+                    ingresarClientes(cod);
+                break;
+
+                case 2:
+                    c = false;
+                break;
+            
+                default:
+                break;
+            }
+        }
+    }
 }
 
 main()
@@ -1490,7 +1509,7 @@ main()
                     break;
 
                     case 5:
-                        verClientes();
+                        reporteClientes();
                     break;
 
                     case 6:
@@ -1504,7 +1523,7 @@ main()
 
             //Facturacion
             case 3:
-                //Llamar funcion facturacion()
+                facturacion();
             break;
 
             //Proveedores
@@ -1544,7 +1563,7 @@ main()
                     break;
 
                     case 5:
-                        verProv();
+                        reporteProveedores();
                     break;
 
                     case 6:
@@ -1566,7 +1585,7 @@ main()
                 cout<<"3.) Buscar"<<endl;
                 cout<<"4.) Eliminar"<<endl;
                 cout<<"5.) Ver Todo"<<endl;
-                cout<<"5.) Regresar"<<endl<<endl;
+                cout<<"6.) Regresar"<<endl<<endl;
                 cout<<"Seleccione una opcion: ";
                 cin>>op1;
                 switch (op1)
@@ -1593,7 +1612,7 @@ main()
                     break;
 
                     case 5:
-                        verEmpleados();
+                        reporteEmpleados();
                     break;
 
                     case 6:
