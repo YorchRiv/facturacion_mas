@@ -1355,49 +1355,6 @@ void reporteEmpleados(){
     system("pause");
 }
 
-void verFactura(int cod) //pendiente xd
-{
-    int y = 9;
-	gotoxy(25,7); cout<<"DESCRIPCION DE LA FACTURA";
-    gotoxy(5,8); cout<<"CODIGO";
-	gotoxy(15,8); cout<<"DESCRIPCION";
-    gotoxy(50,8); cout<<"PRECIO UNITARIO";
-	gotoxy(70,8); cout<<"CANTIDAD";
-    for(int x = 1; x <= 100; x++)
-    {
-        if(factura[x].activo == true)
-        {
-            for(int z = 1; z <=100; z++)
-            {
-                if(factura[x].prodActivo[z] == true)
-                {
-                    gotoxy(5, y); cout<<factura[x].codProductos[z];
-                    gotoxy(15, y); cout<<articulos[z].nombre;
-                    gotoxy(50, y); cout<<"Q. "<<articulos[z].precio;
-                    gotoxy(70, y); cout<<factura[x].cantProductos[z];
-                    y+=1;
-                }
-            }
-        }
-    }
-}
-
-bool existeNit(int nit)
-{
-    for(int x = 1; x <= 100; x++)
-    {
-        if(clientes[x].nit == nit)
-        {
-            return true;
-            break;
-        }
-        else if (x == 100)
-        {
-            return false;
-        }
-    }
-}
-
 int generarArrayNit(int cod) //Esta funcion recibiara el nit del cliente y devolvera su valor en el array
 {
     for(int x = 1; x <= 100; x++)
@@ -1428,6 +1385,46 @@ int generarCodFactura() //Esta funcion genera un numero aleatorio en el array ma
         {
             return 0;
             break;
+        }
+    }
+}
+
+void verFactura(int cod)
+{
+    int y = 9;
+	gotoxy(25,7); cout<<"DESCRIPCION DE LA FACTURA";
+    gotoxy(5,8); cout<<"CODIGO";
+	gotoxy(15,8); cout<<"DESCRIPCION";
+    gotoxy(50,8); cout<<"PRECIO UNITARIO";
+	gotoxy(70,8); cout<<"CANTIDAD";
+    if(factura[cod].activo == true)
+    {
+        for(int z = 1; z <=100; z++)
+        {
+            if(factura[cod].prodActivo[z] == true)
+            {
+                gotoxy(5, y); cout<<factura[cod].codProductos[z];
+                gotoxy(15, y); cout<<articulos[z].nombre;
+                gotoxy(50, y); cout<<"Q. "<<articulos[z].precio;
+                gotoxy(70, y); cout<<factura[cod].cantProductos[z];
+                y+=1;
+            }
+        }
+    }
+}
+
+bool existeNit(int nit)
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(clientes[x].nit == nit)
+        {
+            return true;
+            break;
+        }
+        else if (x == 100)
+        {
+            return false;
         }
     }
 }
