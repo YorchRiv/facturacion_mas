@@ -4,6 +4,7 @@
 #include<windows.h> 
 #include<string>
 #include<conio.h>
+#include<ctime>
 
 using namespace std;
 
@@ -54,6 +55,20 @@ struct emp //empleados
     bool activo = false;
 
 }empleados[100];
+
+struct codFac
+{
+    int codigo = 0;
+    bool activo = false;
+    bool prodActivo[100];
+    char nombre[100];
+    char direccion[100];
+    char empleado[100];
+    char puesto[100];
+    int codProductos[100];
+    int cantProductos[100];
+
+}factura[100];
 
 void gotoxy(int x,int y){  
 	HANDLE hcon;  
@@ -1340,6 +1355,33 @@ void reporteEmpleados(){
     system("pause");
 }
 
+void verFactura(int cod) //pendiente xd
+{
+    int y = 9;
+	gotoxy(25,7); cout<<"DESCRIPCION DE LA FACTURA";
+    gotoxy(5,8); cout<<"CODIGO";
+	gotoxy(15,8); cout<<"DESCRIPCION";
+    gotoxy(50,8); cout<<"PRECIO UNITARIO";
+	gotoxy(70,8); cout<<"CANTIDAD";
+    for(int x = 1; x <= 100; x++)
+    {
+        if(factura[x].activo == true)
+        {
+            for(int z = 1; z <=100; z++)
+            {
+                if(factura[x].prodActivo[z] == true)
+                {
+                    gotoxy(5, y); cout<<factura[x].codProductos[z];
+                    gotoxy(15, y); cout<<articulos[z].nombre;
+                    gotoxy(50, y); cout<<"Q. "<<articulos[z].precio;
+                    gotoxy(70, y); cout<<factura[x].cantProductos[z];
+                    y+=1;
+                }
+            }
+        }
+    }
+}
+
 bool existeNit(int nit)
 {
     for(int x = 1; x <= 100; x++)
@@ -1349,27 +1391,101 @@ bool existeNit(int nit)
             return true;
             break;
         }
-        else
+        else if (x == 100)
         {
             return false;
         }
     }
 }
 
+int generarArrayNit(int cod) //Esta funcion recibiara el nit del cliente y devolvera su valor en el array
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(clientes[x].nit == cod)
+        {
+            return x;
+            break;
+        }
+    }
+}
+
+int generarCodFactura() //Esta funcion genera un numero aleatorio en el array mas proximo y retorna su pocicion.
+{
+    int aleatorio, DESDE=10000, HASTA=999999;
+    for(int x = 1; x <= 100; x++)
+    {
+        if(factura[x].activo == false)
+        {
+            srand(time(NULL));
+            aleatorio = rand()%(HASTA-DESDE+1)+DESDE;
+            factura[x].codigo = aleatorio;
+            factura[x].activo = true;
+            return x;
+            break;
+        }
+        else if (x == 100)
+        {
+            return 0;
+            break;
+        }
+    }
+}
+
 void facturacion()
 {
-    int nit, op, cod;
-    bool c = true;
+    int nit, op, cod, nitGen;
+    int fac, codF, cant, x = 1;
+    bool c = true, facturar = true;
+    system("cls");
+    cout<<"BIENVENIDO AL SISTEMA DE FACTURACION"<<endl<<endl;
+    cout<<"Ingrese su nit: ";
+    cin>>nit;
     while(c == true)
     {
-        system("cls");
-        cout<<"BIENVENIDO AL SISTEMA DE FACTURACION"<<endl<<endl;
-        cout<<"Ingrese su nit: ";
-        cin>>nit;
-        if(existeNit(nit) == true)
+        if(existeNit(nit) == true) //nit validado
         {
-            cout<<"True"<<endl;
-            system("pause");
+            nitGen = generarArrayNit(nit); //array del nit
+            fac = generarCodFactura(); //codigo de factura
+            while(facturar == true)
+            {
+                system("cls");
+                cout<<"BIENVENIDO AL SISTEMA DE FACTURACION"<<endl<<endl;
+                cout<<"SUPERTIENDA MAS+"<<endl;
+                cout<<"Nombre: "<<clientes[nitGen].nombre<<endl;
+                cout<<"Direccion: "<<clientes[nitGen].direccion<<endl;
+                cout<<"Numero de Factura: "<<factura[fac].codigo<<endl;
+                verFactura(fac);
+                cout<<endl<<endl;
+                cout<<"Ingrese codigo de producto a agregar (0 = Finalizar): ";
+                cin>>codF;
+                if(articulos[codF].activo == true && codF > 0)
+                {
+                    cout<<"Su articulo seleccionado es: "<<articulos[codF].nombre<<endl;
+                    cout<<"Ingrese la cantidad que desea: ";
+                    cin>>cant;
+                    if(cant > 0)
+                    {
+                        factura[fac].codProductos[codF] = codF;
+                        factura[fac].cantProductos[codF] = cant;
+                        factura[fac].prodActivo[codF] = true;
+                    }
+                    else
+                    {
+                        cout<<"Datos Invalidos"<<endl;
+                        system("pause");
+                    }
+                }
+                else if(articulos[codF].activo == false && codF > 0)
+                {
+                    cout<<"Producto no existente"<<endl;
+                    system("pause");
+                }
+                else if(codF == 0)
+                {
+                    facturar = false;
+                }
+            }
         }
         else
         {
