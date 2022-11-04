@@ -1405,13 +1405,13 @@ double totalFactura(int cod)
 
 void verFactura(int cod)
 {
-    int y = 9;
-	gotoxy(25,7); cout<<"DESCRIPCION DE LA FACTURA";
-    gotoxy(5,8); cout<<"CODIGO";
-	gotoxy(15,8); cout<<"DESCRIPCION";
-    gotoxy(50,8); cout<<"PRECIO UNITARIO";
-	gotoxy(70,8); cout<<"CANTIDAD";
-    gotoxy(85,8); cout<<"SUBTOTAL";
+    int y = 10;
+	gotoxy(37,8); cout<<"DESCRIPCION DE LA FACTURA";
+    gotoxy(5,9); cout<<"CODIGO";
+	gotoxy(15,9); cout<<"DESCRIPCION";
+    gotoxy(50,9); cout<<"PRECIO UNITARIO";
+	gotoxy(70,9); cout<<"CANTIDAD";
+    gotoxy(85,9); cout<<"SUBTOTAL";
     if(factura[cod].activo == true)
     {
         for(int z = 1; z <=100; z++)
@@ -1468,6 +1468,7 @@ void facturacion()
                 cout<<"SUPERTIENDA MAS+"<<endl;
                 cout<<"Nombre: "<<clientes[nitGen].nombre<<endl;
                 cout<<"Direccion: "<<clientes[nitGen].direccion<<endl;
+                cout<<"NIT: "<<clientes[nitGen].nit<<endl;
                 cout<<"Numero de Factura: "<<factura[fac].codigo<<endl;
                 verFactura(fac);
                 cout<<endl<<endl;
@@ -1511,7 +1512,17 @@ void facturacion()
                 }
                 else if(codF == 0)
                 {
+                    system("cls");
+                    gotoxy(40, 2); cout<<"SUPERTIENDA MAS+"<<endl;
+                    gotoxy(38, 3); cout<<"Nombre: "<<clientes[nitGen].nombre<<endl;
+                    gotoxy(38, 4); cout<<"Direccion: "<<clientes[nitGen].direccion<<endl;
+                    gotoxy(42, 5); cout<<"NIT: "<<clientes[nitGen].nit<<endl;
+                    gotoxy(36, 6); cout<<"Numero de Factura: "<<factura[fac].codigo<<endl;
+                    verFactura(fac);
+                    cout<<endl;
                     facturar = false;
+                    c = false;
+                    system("pause");
                 }
             }
         }
