@@ -67,6 +67,7 @@ struct codFac
     char puesto[100];
     int codProductos[100];
     int cantProductos[100];
+    double total;
 
 }factura[100];
 
@@ -1389,6 +1390,19 @@ int generarCodFactura() //Esta funcion genera un numero aleatorio en el array ma
     }
 }
 
+double totalFactura(int cod)
+{
+    double total = 0;
+    for(int x = 1; x <= 100; x++)
+    {
+        if(factura[cod].prodActivo[x] == true)
+        {
+            total += (articulos[x].precio * factura[cod].cantProductos[x]);
+        }
+    }
+    return total;
+}
+
 void verFactura(int cod)
 {
     int y = 9;
@@ -1397,6 +1411,7 @@ void verFactura(int cod)
 	gotoxy(15,8); cout<<"DESCRIPCION";
     gotoxy(50,8); cout<<"PRECIO UNITARIO";
 	gotoxy(70,8); cout<<"CANTIDAD";
+    gotoxy(85,8); cout<<"SUBTOTAL";
     if(factura[cod].activo == true)
     {
         for(int z = 1; z <=100; z++)
@@ -1407,9 +1422,11 @@ void verFactura(int cod)
                 gotoxy(15, y); cout<<articulos[z].nombre;
                 gotoxy(50, y); cout<<"Q. "<<articulos[z].precio;
                 gotoxy(70, y); cout<<factura[cod].cantProductos[z];
+                gotoxy(85, y); cout<<"Q. "<<articulos[z].precio * factura[cod].cantProductos[z];
                 y+=1;
             }
         }
+        gotoxy(78, y+1); cout<<"TOTAL: Q. "<<totalFactura(cod);
     }
 }
 
@@ -1461,11 +1478,25 @@ void facturacion()
                     cout<<"Su articulo seleccionado es: "<<articulos[codF].nombre<<endl;
                     cout<<"Ingrese la cantidad que desea: ";
                     cin>>cant;
-                    if(cant > 0)
+                    if(cant > 0 && articulos[codF].cantidadTienda >= cant)
                     {
                         factura[fac].codProductos[codF] = codF;
-                        factura[fac].cantProductos[codF] = cant;
                         factura[fac].prodActivo[codF] = true;
+                        if(factura[fac].cantProductos[codF] == 0) //si la cantidad de productos en la factura es igual a 0, la cantidad ingresada es igual a la cantidad de productos
+                        {
+                            factura[fac].cantProductos[codF] = cant;
+                        }
+                        else if(factura[fac].cantProductos[codF] > 0) //si la cantidad de productos de la factura es mayor a 0, la cantidad ingresada se suma a la cantidad de productos
+                        {
+                            factura[fac].cantProductos[codF] += cant;
+                        }
+                        articulos[codF].cantidadTienda -= cant; //Restar de tienda
+                    }
+                    else if (articulos[codF].cantidadTienda < cant)
+                    {
+                        cout<<endl<<"No existen suficientes productos en tienda, realize peticion a bodega"<<endl;
+                        cout<<"Cantidad de "<<articulos[codF].nombre<<" en tienda: "<<articulos[codF].cantidadTienda<<endl;
+                        system("pause");
                     }
                     else
                     {
