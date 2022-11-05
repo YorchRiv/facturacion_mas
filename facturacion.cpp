@@ -1727,9 +1727,24 @@ void facturacion()
     }
 }
 
+int buscarFactura(int fac)
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(factura[x].codigo == fac)
+        {
+            return x;
+        }
+        else if(x == 100)
+        {
+            return 0;
+        }
+    }
+}
+
 main()
 {
-    int opcion, op1, cod;
+    int opcion, op1, cod, fact;
     bool repeticion = true;
     generarDatos();
     while(repeticion == true)
@@ -1869,7 +1884,19 @@ main()
                     break;
 
                     case 2:
-                    /* code */
+                        reporteFacturas();
+                        cout<<endl<<"Ingrese el codigo de la factura que desea eliminar: ";
+                        cin>>fact;
+                        if(buscarFactura(fact) != 0)
+                        {
+                            eliminarFactura(buscarFactura(fact));
+                            cout<<"Factura Eliminada"<<endl;
+                            system("pause");
+                        }
+                        else{
+                            cout<<"Factura no encontrada"<<endl;
+                            system("pause");
+                        }
                     break;
 
                     case 3:
