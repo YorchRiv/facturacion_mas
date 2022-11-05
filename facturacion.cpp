@@ -7,6 +7,8 @@
 #include<ctime>
 #include<stdio.h>
 #include<time.h>
+#include<algorithm>
+#include<cmath>
 
 using namespace std;
 
@@ -25,6 +27,7 @@ struct art //articulos
     char nombre[100];
     int cantidadTienda;
     int cantidadBodega;
+    int numVentas = 0;
     float precio;
     bool activo = false; //para detectar que codigos estan en uso.
 
@@ -81,6 +84,12 @@ int numeroAleatorio(int a, int b)
     return aleatorio;
 }
 
+int decimal(double dVal)
+{
+    int nVal = static_cast<int>(std::round(dVal));
+    return nVal;
+}
+
 void gotoxy(int x,int y){  
 	HANDLE hcon;  
     hcon = GetStdHandle(STD_OUTPUT_HANDLE);  
@@ -100,6 +109,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[1].cantidadBodega = 140;
     articulos[1].precio = 30.50;
     articulos[1].activo = true;
+    articulos[1].numVentas = 18;
 
     articulos[2].codigo = 2;
     articulos[2].codProveedor = 400;
@@ -108,6 +118,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[2].cantidadBodega = 100;
     articulos[2].precio = 30.45;
     articulos[2].activo = true;
+    articulos[2].numVentas = 14;
 
     articulos[3].codigo = 3;
     articulos[3].codProveedor = 400;
@@ -116,6 +127,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[3].cantidadBodega = 39;
     articulos[3].precio = 25.64;
     articulos[3].activo = true;
+    articulos[3].numVentas = 25;
 
     articulos[4].codigo = 4;
     articulos[4].codProveedor = 400;
@@ -124,6 +136,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[4].cantidadBodega = 200;
     articulos[4].precio = 14.69;
     articulos[4].activo = true;
+    articulos[4].numVentas = 31;
 
     articulos[5].codigo = 5;
     articulos[5].codProveedor = 400;
@@ -132,6 +145,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[5].cantidadBodega = 600;
     articulos[5].precio = 50;
     articulos[5].activo = true;
+    articulos[5].numVentas = 18;
 
     articulos[6].codigo = 6;
     articulos[6].codProveedor = 100;
@@ -140,6 +154,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[6].cantidadBodega = 310;
     articulos[6].precio = 9.5;
     articulos[6].activo = true;
+    articulos[6].numVentas = 25;
 
     articulos[7].codigo = 7;
     articulos[7].codProveedor = 100;
@@ -148,6 +163,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[7].cantidadBodega = 200;
     articulos[7].precio = 10;
     articulos[7].activo = true;
+    articulos[7].numVentas = 17;
 
     articulos[8].codigo = 8;
     articulos[8].codProveedor = 100;
@@ -156,6 +172,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[8].cantidadBodega = 90;
     articulos[8].precio = 5.5;
     articulos[8].activo = true;
+    articulos[8].numVentas = 19;
 
     articulos[9].codigo = 9;
     articulos[9].codProveedor = 200;
@@ -164,6 +181,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[9].cantidadBodega = 21;
     articulos[9].precio = 13.5;
     articulos[9].activo = true;
+    articulos[9].numVentas = 29;
 
     articulos[10].codigo = 10;
     articulos[10].codProveedor = 300;
@@ -172,6 +190,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[10].cantidadBodega = 200;
     articulos[10].precio = 9.5;
     articulos[10].activo = true;
+    articulos[10].numVentas = 34;
 
     articulos[11].codigo = 11;
     articulos[11].codProveedor = 300;
@@ -180,6 +199,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[11].cantidadBodega = 100;
     articulos[11].precio = 16.5;
     articulos[11].activo = true;
+    articulos[11].numVentas = 13;
 
     articulos[12].codigo = 12;
     articulos[12].codProveedor = 400;
@@ -188,6 +208,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[12].cantidadBodega = 891;
     articulos[12].precio = 1.5;
     articulos[12].activo = true;
+    articulos[12].numVentas = 22;
 
     articulos[13].codigo = 13;
     articulos[13].codProveedor = 100;
@@ -196,6 +217,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[13].cantidadBodega = 159;
     articulos[13].precio = 1;
     articulos[13].activo = true;
+    articulos[13].numVentas = 9;
 
     articulos[14].codigo = 14;
     articulos[14].codProveedor = 200;
@@ -204,6 +226,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[14].cantidadBodega = 210;
     articulos[14].precio = 20;
     articulos[14].activo = true;
+    articulos[14].numVentas = 7;
 
     articulos[15].codigo = 15;
     articulos[15].codProveedor = 500;
@@ -212,6 +235,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[15].cantidadBodega = 100;
     articulos[15].precio = 9.5;
     articulos[15].activo = true;
+    articulos[15].numVentas = 24;
 
     clientes[1].codigo = 1;
     strcpy(clientes[1].nombre, "Jorge Mejicanos");
@@ -666,6 +690,7 @@ void verArticulos()
     gotoxy(90, 2); cout<<"CANT. BODEGA";
     gotoxy(110,2); cout<<"COD. PROV";
     gotoxy(125,2); cout<<"NOMBRE DE PROVEEDOR";
+    gotoxy(150,2); cout<<"NUM. VENTAS";
     for(int x = 1; x <= 100; x++)
     {
         if(articulos[x].activo == true)
@@ -678,6 +703,7 @@ void verArticulos()
             gotoxy(90, y); cout<<articulos[x].cantidadBodega;
             gotoxy(110, y); cout<<"("<<articulos[x].codProveedor<<") ";
 			gotoxy(125, y); cout<<proveedores[codP].nombre;
+            gotoxy(150, y); cout<<articulos[x].numVentas;
             y+=1;
         }
     }
@@ -1372,8 +1398,8 @@ void reporteFacturas(){
 	gotoxy(48,0); cout<<"REPORTE DE FACTURAS";
     gotoxy(5,2); cout<<"CODIGO";
 	gotoxy(15,2); cout<<"CLIENTE";
-    gotoxy(40,2); cout<<"NIT";
-    gotoxy(70,2); cout<<"EMPLEADO";
+    gotoxy(45,2); cout<<"NIT";
+    gotoxy(60,2); cout<<"EMPLEADO";
     gotoxy(90, 2); cout<<"CAJA";
     gotoxy(110,2); cout<<"TOTAL";
     for(int x = 1; x <= 100; x++)
@@ -1382,8 +1408,8 @@ void reporteFacturas(){
         {
             gotoxy(5, y); cout<<factura[x].codigo;
             gotoxy(15, y); cout<<clientes[factura[x].codCliente].nombre;
-            gotoxy(40, y); cout<<clientes[factura[x].codCliente].nit;
-            gotoxy(70, y); cout<<empleados[factura[x].codEmpleado].nombre;
+            gotoxy(45, y); cout<<clientes[factura[x].codCliente].nit;
+            gotoxy(60, y); cout<<empleados[factura[x].codEmpleado].nombre;
             gotoxy(90, y); cout<<factura[x].caja;
             gotoxy(110, y); cout<<"Q. "<<factura[x].total;
             y+=1;
@@ -1393,6 +1419,58 @@ void reporteFacturas(){
     system("pause");
 }
 
+void articulosMasVendidos()
+{
+    system("cls");
+    double datos[100], codigo;
+    int orden[100], cod;
+    for(int x = 1; x <= 100; x++)
+    {
+        if(articulos[x].activo == true)
+        {
+            datos[x] = articulos[x].numVentas + (articulos[x].codigo * 0.0001);
+        }
+        else
+        {
+            datos[x] = 0;
+        }
+    }
+    sort(datos, datos + 100);
+    system("cls");
+    int y = 4, codP, cont=1;
+	gotoxy(70,0); cout<<"TOP 10 ARTICULOS MAS VENDIDOS";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"DESCRIPCION";
+    gotoxy(50,2); cout<<"PRECIO UNITARIO";
+	gotoxy(70, 2); cout<<"CANT. TIENDA";
+    gotoxy(90, 2); cout<<"CANT. BODEGA";
+    gotoxy(110,2); cout<<"COD. PROV";
+    gotoxy(125,2); cout<<"NOMBRE DE PROVEEDOR";
+    gotoxy(150,2); cout<<"NUM. VENTAS";
+    for (int i = 100; i > 0; i--)
+    {
+        if(datos[i] > 0 && cont <=10)
+        {
+            orden[i] = (int) datos[i];
+            codigo = (datos[i] - orden[i]) * 10000;
+            cod = decimal(codigo);
+            
+            codP = generarCodProv(articulos[cod].codProveedor);
+            gotoxy(5, y); cout<<articulos[cod].codigo;
+            gotoxy(15, y); cout<<articulos[cod].nombre;
+            gotoxy(50, y); cout<<"Q. "<<articulos[cod].precio;
+			gotoxy(70, y); cout<<articulos[cod].cantidadTienda;
+            gotoxy(90, y); cout<<articulos[cod].cantidadBodega;
+            gotoxy(110, y); cout<<"("<<articulos[cod].codProveedor<<") ";
+			gotoxy(125, y); cout<<proveedores[codP].nombre;
+            gotoxy(150, y); cout<<articulos[cod].numVentas;
+            y+=1;
+            cont++;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
+}
 
 //3.Facturacion
 int generarArrayNit(int cod) //Esta funcion recibiara el nit del cliente y devolvera su valor en el array
@@ -1500,7 +1578,7 @@ bool existeNit(int nit)
 
 int genCodEmpleado() //Esta funcion retorna aleatoriamente el codigo de empleado que atendera.
 {
-    int aleatorio, DESDE=1, HASTA=1;
+    int aleatorio, DESDE=1, HASTA=0;
     int codEmpleados[100];
     for(int x = 1; x <= 100; x++)
     {
@@ -1602,6 +1680,13 @@ void facturacion()
                         system("cls");
                         factura[fac].total = totalFactura(fac);
                         factura[fac].codEmpleado = empleados[codEmp].codigo;
+                        for(int x = 1; x <= 100; x++)//Para que cuente las ventas
+                        {
+                            if(factura[fac].cantProductos[x] > 0)
+                            {
+                                articulos[x].numVentas += factura[fac].cantProductos[x];
+                            }
+                        }
                         cout<<"Factura Guardada Exitosamente"<<endl;
                     }
                     else
@@ -1916,9 +2001,11 @@ main()
                 switch (op1)
                 {
                     case 1:
+                        reporteFacturas();
                     break;
 					
                     case 2:
+                        articulosMasVendidos();
                     break;
 					
 					//articulos en bodega
