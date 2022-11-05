@@ -4,16 +4,20 @@
 #include<windows.h> 
 #include<string>
 #include<conio.h>
+#include<ctime>
+#include<stdio.h>
+#include<time.h>
+#include<algorithm>
+#include<cmath>
 
 using namespace std;
 
 /*Pendientes
-    hacer la parte del provedor para que cuando no concida el codigo del proveedor cree uno nuevo, ya que deve existir el proveedor para ingresar el articulo.
     No se muestran bien los acentos, corregir
     Que se pueda modificar codigo de producto en funcion modificarArticulos
     que pregunte si de verdad quiere modifcar el articulo
     hacer que tire mensaje de error cuando no encuentre buscando por nombre
-    Hacer que los datos se vean como en una tabla en la funcion verArticulos() con gotoxy
+    *Que no se puedan Ingresar Proveedores Repetidos(consultar las demas categorias)
     */
 
 struct art //articulos
@@ -23,6 +27,7 @@ struct art //articulos
     char nombre[100];
     int cantidadTienda;
     int cantidadBodega;
+    int numVentas = 0;
     float precio;
     bool activo = false; //para detectar que codigos estan en uso.
 
@@ -56,6 +61,35 @@ struct emp //empleados
 
 }empleados[100];
 
+struct codFac
+{
+    int codigo = 0;
+    int codCliente;
+    int codEmpleado;
+    int caja;
+    bool activo = false;
+    bool prodActivo[100];
+    int codProductos[100];
+    int cantProductos[100];
+    double total;
+
+}factura[100];
+
+int numeroAleatorio(int a, int b)
+{
+    int aleatorio, DESDE=a, HASTA=b;
+    
+    srand(time(NULL));
+    aleatorio = rand()%(HASTA-DESDE+1)+DESDE;
+    return aleatorio;
+}
+
+int decimal(double dVal)
+{
+    int nVal = static_cast<int>(std::round(dVal));
+    return nVal;
+}
+
 void gotoxy(int x,int y){  
 	HANDLE hcon;  
     hcon = GetStdHandle(STD_OUTPUT_HANDLE);  
@@ -75,14 +109,16 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[1].cantidadBodega = 140;
     articulos[1].precio = 30.50;
     articulos[1].activo = true;
+    articulos[1].numVentas = 18;
 
     articulos[2].codigo = 2;
     articulos[2].codProveedor = 400;
-    strcpy(articulos[2].nombre, "Consomé");
+    strcpy(articulos[2].nombre, "Consome");
     articulos[2].cantidadTienda = 30;
     articulos[2].cantidadBodega = 100;
     articulos[2].precio = 30.45;
     articulos[2].activo = true;
+    articulos[2].numVentas = 14;
 
     articulos[3].codigo = 3;
     articulos[3].codProveedor = 400;
@@ -91,22 +127,25 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[3].cantidadBodega = 39;
     articulos[3].precio = 25.64;
     articulos[3].activo = true;
+    articulos[3].numVentas = 25;
 
     articulos[4].codigo = 4;
     articulos[4].codProveedor = 400;
-    strcpy(articulos[4].nombre, "Puré de tomate");
+    strcpy(articulos[4].nombre, "Pure de tomate");
     articulos[4].cantidadTienda = 60;
     articulos[4].cantidadBodega = 200;
     articulos[4].precio = 14.69;
     articulos[4].activo = true;
+    articulos[4].numVentas = 31;
 
     articulos[5].codigo = 5;
     articulos[5].codProveedor = 400;
-    strcpy(articulos[5].nombre, "Alimento para bebés");
+    strcpy(articulos[5].nombre, "Alimento para bebes");
     articulos[5].cantidadTienda = 49;
     articulos[5].cantidadBodega = 600;
     articulos[5].precio = 50;
     articulos[5].activo = true;
+    articulos[5].numVentas = 18;
 
     articulos[6].codigo = 6;
     articulos[6].codProveedor = 100;
@@ -115,6 +154,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[6].cantidadBodega = 310;
     articulos[6].precio = 9.5;
     articulos[6].activo = true;
+    articulos[6].numVentas = 25;
 
     articulos[7].codigo = 7;
     articulos[7].codProveedor = 100;
@@ -123,22 +163,25 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[7].cantidadBodega = 200;
     articulos[7].precio = 10;
     articulos[7].activo = true;
+    articulos[7].numVentas = 17;
 
     articulos[8].codigo = 8;
     articulos[8].codProveedor = 100;
-    strcpy(articulos[8].nombre, "Azúcar");
+    strcpy(articulos[8].nombre, "Azucar");
     articulos[8].cantidadTienda = 30;
     articulos[8].cantidadBodega = 90;
     articulos[8].precio = 5.5;
     articulos[8].activo = true;
+    articulos[8].numVentas = 19;
 
     articulos[9].codigo = 9;
     articulos[9].codProveedor = 200;
-    strcpy(articulos[9].nombre, "Chile piquín");
+    strcpy(articulos[9].nombre, "Chile piquin");
     articulos[9].cantidadTienda = 3;
     articulos[9].cantidadBodega = 21;
     articulos[9].precio = 13.5;
     articulos[9].activo = true;
+    articulos[9].numVentas = 29;
 
     articulos[10].codigo = 10;
     articulos[10].codProveedor = 300;
@@ -147,6 +190,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[10].cantidadBodega = 200;
     articulos[10].precio = 9.5;
     articulos[10].activo = true;
+    articulos[10].numVentas = 34;
 
     articulos[11].codigo = 11;
     articulos[11].codProveedor = 300;
@@ -155,6 +199,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[11].cantidadBodega = 100;
     articulos[11].precio = 16.5;
     articulos[11].activo = true;
+    articulos[11].numVentas = 13;
 
     articulos[12].codigo = 12;
     articulos[12].codProveedor = 400;
@@ -163,6 +208,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[12].cantidadBodega = 891;
     articulos[12].precio = 1.5;
     articulos[12].activo = true;
+    articulos[12].numVentas = 22;
 
     articulos[13].codigo = 13;
     articulos[13].codProveedor = 100;
@@ -171,6 +217,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[13].cantidadBodega = 159;
     articulos[13].precio = 1;
     articulos[13].activo = true;
+    articulos[13].numVentas = 9;
 
     articulos[14].codigo = 14;
     articulos[14].codProveedor = 200;
@@ -179,6 +226,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[14].cantidadBodega = 210;
     articulos[14].precio = 20;
     articulos[14].activo = true;
+    articulos[14].numVentas = 7;
 
     articulos[15].codigo = 15;
     articulos[15].codProveedor = 500;
@@ -187,6 +235,7 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     articulos[15].cantidadBodega = 100;
     articulos[15].precio = 9.5;
     articulos[15].activo = true;
+    articulos[15].numVentas = 24;
 
     clientes[1].codigo = 1;
     strcpy(clientes[1].nombre, "Jorge Mejicanos");
@@ -274,468 +323,21 @@ void generarDatos() //Esta Funcion sirve para Generar los datos base, se generar
     empleados[4].activo = true;
 }
 
-//Metodos de Articulos
-void mostrarArticulo(int cod)
+bool existeProv(int cod)
 {
-    cout<<"Codigo de Producto: "<<articulos[cod].codigo<<endl;
-    cout<<"Codigo de Provedor: "<<articulos[cod].codProveedor<<endl;
-    cout<<"Nombre de Producto: "<<articulos[cod].nombre<<endl;
-    cout<<"Cantidad en Tienda: "<<articulos[cod].cantidadTienda<<endl;
-    cout<<"Cantidad en Bodega: "<<articulos[cod].cantidadBodega<<endl;
-    cout<<"Precio de Producto: "<<articulos[cod].precio<<endl<<endl;
-    //cout<<"Activo?: "<<articulos[cod].activo<<endl<<endl;
-}
-
-void ingresarArticulos(int cod) //Pendientes, hacer lo del codigo del proveedor
-{
-    if(articulos[cod].activo == false) //queda mejor con un if
-    {
-        articulos[cod].activo = true;
-        articulos[cod].codigo = cod;
-        cout<<"Ingrese Codigo de Proveedor: ";
-        cin>>articulos[cod].codProveedor;
-        cout<<"Ingrese Nombre del Producto: ";
-        fflush(stdin); //Sepa, pero sin esta linea no funciona el cin.getline xd
-        cin.getline(articulos[cod].nombre, 100); //Para que se pueda ingresar cadenas de texto con espacios
-        cout<<"Ingrese la Cantidad en Tienda: ";
-        cin>>articulos[cod].cantidadTienda;
-        cout<<"Ingrese la Cantidad en Bodega: ";
-        cin>>articulos[cod].cantidadBodega;
-        cout<<"Ingrese el Precio: ";
-        cin>>articulos[cod].precio;
-        system("cls");
-        cout<<"Este es el articulo: "<<endl<<endl;
-        mostrarArticulo(cod);
-        system("pause");
-    }
-    else
-    {
-        system("cls");
-        cout<<"Codigo ya Existente, ingrese uno diferente."<<endl;
-        system("pause");
-    }
-}
-
-void modificarArticulos()
-{
-    int cod;
-    system("cls");
-    cout<<"Ingrese el codigo del articulo que desea modificar: ";
-    cin>>cod;
-    if(articulos[cod].activo == true)
-    { 
-        cout<<"Estos son los datos actuales del producto: "<<endl<<endl;
-        mostrarArticulo(cod);
-        system("pause");
-        //system("cls");
-        articulos[cod].activo = false;
-        ingresarArticulos(cod);
-    }
-    else
-    {
-        system("cls");
-        cout<<"Codigo no Existente"<<endl;
-        system("pause");
-    }
-}
-
-void verArticulos()
-{
-    system("cls");
     for(int x = 1; x <= 100; x++)
     {
-        if(articulos[x].activo == true)
+        if(proveedores[x].codigo == cod)
         {
-            mostrarArticulo(x);
+            return true;
+            break;
+        }
+        if(x == 100 and proveedores[x].codigo != cod)
+        {
+            return false;
+            break;
         }
     }
-    system("pause");
-}
-
-void eliminarArticulos()
-{
-    int cod, op;
-    system("cls");
-    cout<<"Ingrese el codigo del articulo que desea eliminar: ";
-    cin>>cod;
-    if(articulos[cod].activo == true)
-    { 
-        cout<<"Estos son los datos actuales del producto: "<<endl<<endl;
-        mostrarArticulo(cod);
-        cout<<endl<<"Esta seguro de eliminar este articulo? (1 = si, 2 = no): ";
-        cin>>op;
-        if(op == 1)
-        {
-            articulos[cod].activo = false;
-            system("cls");
-            cout<<"Articulo Eliminado Exitosamente"<<endl;
-            system("pause");
-        }
-    }
-    else
-    {
-        system("cls");
-        cout<<"Codigo no Existente"<<endl;
-        system("pause");
-    }
-}
-
-void buscarArticulos()
-{
-    int op, cod, codP, p = 0;
-
-    //Para opcion de busqueda;
-    string texto, nombre;
-    size_t posicion;
-
-    system("cls");
-    cout<<"Buscar Articulos"<<endl;
-    cout<<"1.) Por Codigo de Producto"<<endl;
-    cout<<"2.) Por Codigo de Proveedor"<<endl;
-    cout<<"3.) Por Nombre de Articulo"<<endl;
-    cout<<"4.) Cancelar"<<endl<<endl;
-    cout<<"Seleccione una opcion de busqueda: ";
-    cin>>op;
-    switch (op)
-    {
-        case 1: //por codigo
-            system("cls");
-            cout<<"Ingrese codigo de articulo: ";
-            cin>>cod;
-            cout<<endl;
-            if(articulos[cod].activo == true)
-            {
-                mostrarArticulo(cod); 
-                system("pause");
-            }
-            else
-            {
-                system("cls");
-                cout<<"Codigo no Existente"<<endl;
-                system("pause");
-            }
-        break;
-    
-        case 2: //por proveedor
-            system("cls");
-            cout<<"Ingrese codigo de proveedor: ";
-            cin>>codP;
-            cout<<endl;
-            system("cls");
-            for(int x = 1; x <= 100; x++)
-            {
-                if(articulos[x].codProveedor == codP)
-                {
-                    mostrarArticulo(x);
-                    p += 1;
-                }
-            }
-            if (p == 0)
-            {
-                cout<<"Proveedor no existente"<<endl;
-            }
-            system("pause");
-        break;
-
-        case 3:
-            system("cls");
-            cout<<"Ingrese nombre a buscar: ";
-            cin>>nombre;
-            for(int x = 1; x <= 100; x++)
-            {
-                texto = articulos[x].nombre;
-                posicion = texto.find(nombre);
-
-                if(posicion != string::npos)
-                {
-                    mostrarArticulo(x);
-                }
-            }
-            system("pause");
-        break;
-
-        default:
-        break;
-    }
-}
-
-void trasladarArticulos()
-{
-    int cod, op, traslado;
-    system("cls");
-    cout<<"Ingrese el codigo del articulo a trasladar: ";
-    cin>>cod;
-    if(articulos[cod].activo == true)
-    {
-        system("cls");
-        cout<<"Informacion del Articulo: "<<endl<<endl;
-        mostrarArticulo(cod);
-        cout<<"1.) Trasladar de Tienda a Bodega"<<endl;
-        cout<<"2.) Trasladar de Bodega a tienda"<<endl;
-        cout<<"3.) Cancelar"<<endl;
-        cout<<"Seleccione una opcion: ";
-        cin>>op;
-        if(op == 1 && articulos[cod].cantidadTienda > 0) //Tienda a bodega
-        {
-            system("cls");
-            cout<<"Existen "<<articulos[cod].cantidadTienda<<" unidades de "<<articulos[cod].nombre<<" en tienda"<<endl;
-            cout<<"Cuantos Requiere trasladar a bodega?: ";
-            cin>>traslado;
-            if(traslado <= articulos[cod].cantidadTienda && traslado > 0)
-            {
-                system("cls");
-                articulos[cod].cantidadTienda -= traslado;
-                articulos[cod].cantidadBodega += traslado;
-                cout<<"Se trasladaron "<<traslado<<" unidades de "<<articulos[cod].nombre<<" a bodega"<<endl;
-                system("pause");
-            }
-            else
-            {
-                system("cls");
-                cout<<"Datos invalidos"<<endl;
-                system("pause");
-            }
-        }
-        else if(articulos[cod].cantidadTienda == 0)
-        {
-            system("cls");
-            cout<<"No existen Articulos en tienda"<<endl;
-            system("pause");
-        }
-        if(op == 2 && articulos[cod].cantidadBodega > 0) //bodega a tienda
-        {
-            system("cls");
-            cout<<"Existen "<<articulos[cod].cantidadBodega<<" unidades de "<<articulos[cod].nombre<<" en bodega"<<endl;
-            cout<<"Cuantos Requiere trasladar a tienda?: ";
-            cin>>traslado;
-            if(traslado <= articulos[cod].cantidadBodega && traslado > 0)
-            {
-                system("cls");
-                articulos[cod].cantidadTienda += traslado;
-                articulos[cod].cantidadBodega -= traslado;
-                cout<<"Se trasladaron "<<traslado<<" unidades de "<<articulos[cod].nombre<<" a tienda"<<endl;
-                system("pause");
-            }
-            else
-            {
-                system("cls");
-                cout<<"Datos invalidos"<<endl;
-                system("pause");
-            }
-        }
-        else if(articulos[cod].cantidadBodega == 0)
-        {
-            system("cls");
-            cout<<"No existen Articulos en bodega"<<endl;
-            system("pause");
-        }
-    }
-    else
-    {
-        system("cls");
-        cout<<"Codigo no Existente"<<endl;
-        system("pause");
-    }
-}
-
-// Metodos de Clientes
-void mostrarCliente(int cod)
-{
-    cout<<"Codigo de Cliente: "<<clientes[cod].codigo<<endl;
-    cout<<"Nombre de Cliente: "<<clientes[cod].nombre<<endl;
-    cout<<"Direccion de Cliente: "<<clientes[cod].direccion<<endl;
-    cout<<"Nit de Cliente: "<<clientes[cod].nit<<endl<<endl;
-}
-
-void ingresarClientes(int cod)
-{
-    if(clientes[cod].activo == false) //queda mejor con un if
-    {
-        clientes[cod].activo = true;
-        clientes[cod].codigo = cod;
-        cout<<"Ingrese Nombre del Cliente: ";
-        fflush(stdin); //Sepa, pero sin esta linea no funciona el cin.getline xd
-        cin.getline(clientes[cod].nombre, 100);
-        cout<<"Ingrese la Direccion: ";
-        cin>>clientes[cod].direccion;
-        cout<<"Ingrese el Nit: ";
-        cin>>clientes[cod].nit;
-        system("cls");
-        cout<<"Este es el cliente: "<<endl<<endl;
-        mostrarCliente(cod);
-        system("pause");
-    }
-    else
-    {
-        system("cls");
-        cout<<"Codigo ya Existente, ingrese uno diferente."<<endl;
-        system("pause");
-    }
-}
-
-void modificarClientes()
-{
-    int cod;
-    system("cls");
-    cout<<"Ingrese el codigo del cliente que desea modificar: ";
-    cin>>cod;
-    if(clientes[cod].activo == true)
-    { 
-        cout<<"Estos son los datos actuales del cliente: "<<endl<<endl;
-        mostrarCliente(cod);
-        system("pause");
-        //system("cls");
-        clientes[cod].activo = false;
-        ingresarClientes(cod);
-    }
-    else
-    {
-        system("cls");
-        cout<<"Codigo no Existente"<<endl;
-        system("pause");
-    }
-}
-
-void buscarClientes()
-{
-    int op, cod, codP, p = 0;
-
-    //Para opcion de busqueda;
-    string texto, nombre;
-    size_t posicion;
-
-    system("cls");
-    cout<<"Buscar Clientes"<<endl;
-    cout<<"1.) Por Codigo de Cliente"<<endl;
-    cout<<"2.) Por NIT de Cliente"<<endl;
-    cout<<"3.) Por Nombre de Cliente"<<endl;
-    cout<<"4.) Por Direccion de Cliente"<<endl;
-    cout<<"5.) Cancelar"<<endl<<endl;
-    cout<<"Seleccione una opcion de busqueda: ";
-    cin>>op;
-    switch (op)
-    {
-        case 1: //por codigo
-            system("cls");
-            cout<<"Ingrese codigo de Cliente: ";
-            cin>>cod;
-            cout<<endl;
-            if(clientes[cod].activo == true)
-            {
-                mostrarCliente(cod); 
-                system("pause");
-            }
-            else
-            {
-                system("cls");
-                cout<<"Codigo no Existente"<<endl;
-                system("pause");
-            }
-        break;
-    
-        case 2: //por proveedor
-            system("cls");
-            cout<<"Ingrese NIT de Cliente: ";
-            cin>>codP;
-            cout<<endl;
-            system("cls");
-            for(int x = 1; x <= 100; x++)
-            {
-                if(clientes[x].nit == codP)
-                {
-                    mostrarCliente(x);
-                    p += 1;
-                }
-            }
-            if (p == 0)
-            {
-                cout<<"NIT no existente"<<endl;
-            }
-            system("pause");
-        break;
-
-        case 3:
-            system("cls");
-            cout<<"Ingrese nombre a buscar: ";
-            cin>>nombre;
-            for(int x = 1; x <= 100; x++)
-            {
-                texto = clientes[x].nombre;
-                posicion = texto.find(nombre);
-
-                if(posicion != string::npos)
-                {
-                    system("cls");
-                    cout<<"Datos Encontrados: "<<endl;
-                    mostrarCliente(x);
-                }
-            }
-            system("pause");
-        break;
-
-        case 4:
-            system("cls");
-            cout<<"Ingrese Direccion a buscar: ";
-            cin>>nombre;
-            for(int x = 1; x <= 100; x++)
-            {
-                texto = clientes[x].direccion;
-                posicion = texto.find(nombre);
-
-                if(posicion != string::npos)
-                {
-                    system("cls");
-                    cout<<"Datos Encontrados: "<<endl;
-                    mostrarCliente(x);
-                }
-            }
-            system("pause");
-        break;
-
-        default:
-        break;
-    }
-}
-
-void eliminarClientes()
-{
-    int cod, op;
-    system("cls");
-    cout<<"Ingrese el codigo del Cliente que desea eliminar: ";
-    cin>>cod;
-    if(clientes[cod].activo == true)
-    { 
-        cout<<"Estos son los datos actuales del Cliente: "<<endl<<endl;
-        mostrarCliente(cod);
-        cout<<endl<<"Esta seguro de eliminar este Cliente? (1 = si, 2 = no): ";
-        cin>>op;
-        if(op == 1)
-        {
-            clientes[cod].activo = false;
-            system("cls");
-            cout<<"Cliente Eliminado Exitosamente"<<endl;
-            system("pause");
-        }
-    }
-    else
-    {
-        system("cls");
-        cout<<"Codigo no Existente"<<endl;
-        system("pause");
-    }
-}
-
-void verClientes()
-{
-    system("cls");
-    for(int x = 1; x <= 100; x++)
-    {
-        if(clientes[x].activo == true)
-        {
-            mostrarCliente(x);
-        }
-    }
-    system("pause");
 }
 
 //Metodos de Proveedores
@@ -978,6 +580,504 @@ void verProv()
     system("pause");
 }
 
+//Metodos de Articulos
+void mostrarArticulo(int cod)
+{
+    cout<<"Codigo de Producto: "<<articulos[cod].codigo<<endl;
+    cout<<"Codigo de Provedor: "<<articulos[cod].codProveedor<<endl;
+    cout<<"Nombre de Producto: "<<articulos[cod].nombre<<endl;
+    cout<<"Cantidad en Tienda: "<<articulos[cod].cantidadTienda<<endl;
+    cout<<"Cantidad en Bodega: "<<articulos[cod].cantidadBodega<<endl;
+    cout<<"Precio de Producto: "<<articulos[cod].precio<<endl<<endl;
+    //cout<<"Activo?: "<<articulos[cod].activo<<endl<<endl;
+}
+
+void ingresarArticulos(int cod) //Pendientes, hacer lo del codigo del proveedor
+{
+    int codp, codpp, op;
+    bool c = true;
+    if(articulos[cod].activo == false) //queda mejor con un if
+    {
+        articulos[cod].activo = true;
+        articulos[cod].codigo = cod;
+        cout<<"Ingrese Codigo de Proveedor: ";
+        cin>>articulos[cod].codProveedor;
+        cout<<"Ingrese Nombre del Producto: ";
+        fflush(stdin); //Sepa, pero sin esta linea no funciona el cin.getline xd
+        cin.getline(articulos[cod].nombre, 100); //Para que se pueda ingresar cadenas de texto con espacios
+        cout<<"Ingrese la Cantidad en Tienda: ";
+        cin>>articulos[cod].cantidadTienda;
+        cout<<"Ingrese la Cantidad en Bodega: ";
+        cin>>articulos[cod].cantidadBodega;
+        cout<<"Ingrese el Precio: ";
+        cin>>articulos[cod].precio;
+        system("cls");
+        cout<<"Este es el articulo: "<<endl<<endl;
+        mostrarArticulo(cod);
+        system("pause");
+    }
+    else if(cod > 100 or cod == 0)
+    {
+        system("cls");
+        cout<<"Codigo Incorrecto, esta fuera de rango."<<endl;
+        system("pause");
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo ya Existente, ingrese uno diferente."<<endl;
+        system("pause");
+    }
+}
+
+void modificarArticulos()
+{
+    int cod;
+    system("cls");
+    cout<<"Ingrese el codigo del articulo que desea modificar: ";
+    cin>>cod;
+    if(articulos[cod].activo == true)
+    { 
+        cout<<"Estos son los datos actuales del producto: "<<endl<<endl;
+        mostrarArticulo(cod);
+        system("pause");
+        //system("cls");
+        articulos[cod].activo = false;
+        ingresarArticulos(cod);
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
+
+void verArticulos()
+{
+    system("cls");
+    int y = 4, codP;
+	gotoxy(70,0); cout<<"REPORTE DE ARTICULOS";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"DESCRIPCION";
+    gotoxy(50,2); cout<<"PRECIO UNITARIO";
+	gotoxy(70, 2); cout<<"CANT. TIENDA";
+    gotoxy(90, 2); cout<<"CANT. BODEGA";
+    gotoxy(110,2); cout<<"COD. PROV";
+    gotoxy(125,2); cout<<"NOMBRE DE PROVEEDOR";
+    gotoxy(150,2); cout<<"NUM. VENTAS";
+    for(int x = 1; x <= 100; x++)
+    {
+        if(articulos[x].activo == true)
+        {
+            codP = generarCodProv(articulos[x].codProveedor);
+            gotoxy(5, y); cout<<articulos[x].codigo;
+            gotoxy(15, y); cout<<articulos[x].nombre;
+            gotoxy(50, y); cout<<"Q. "<<articulos[x].precio;
+			gotoxy(70, y); cout<<articulos[x].cantidadTienda;
+            gotoxy(90, y); cout<<articulos[x].cantidadBodega;
+            gotoxy(110, y); cout<<"("<<articulos[x].codProveedor<<") ";
+			gotoxy(125, y); cout<<proveedores[codP].nombre;
+            gotoxy(150, y); cout<<articulos[x].numVentas;
+            y+=1;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
+}
+
+void eliminarArticulos()
+{
+    int cod, op;
+    system("cls");
+    cout<<"Ingrese el codigo del articulo que desea eliminar: ";
+    cin>>cod;
+    if(articulos[cod].activo == true)
+    { 
+        cout<<"Estos son los datos actuales del producto: "<<endl<<endl;
+        mostrarArticulo(cod);
+        cout<<endl<<"Esta seguro de eliminar este articulo? (1 = si, 2 = no): ";
+        cin>>op;
+        if(op == 1)
+        {
+            articulos[cod].activo = false;
+            system("cls");
+            cout<<"Articulo Eliminado Exitosamente"<<endl;
+            system("pause");
+        }
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
+
+void buscarArticulos()
+{
+    int op, cod, codP, p = 0;
+
+    //Para opcion de busqueda;
+    string texto, nombre;
+    size_t posicion;
+
+    system("cls");
+    cout<<"Buscar Articulos"<<endl;
+    cout<<"1.) Por Codigo de Producto"<<endl;
+    cout<<"2.) Por Codigo de Proveedor"<<endl;
+    cout<<"3.) Por Nombre de Articulo"<<endl;
+    cout<<"4.) Cancelar"<<endl<<endl;
+    cout<<"Seleccione una opcion de busqueda: ";
+    cin>>op;
+    switch (op)
+    {
+        case 1: //por codigo
+            system("cls");
+            cout<<"Ingrese codigo de articulo: ";
+            cin>>cod;
+            cout<<endl;
+            if(articulos[cod].activo == true)
+            {
+                mostrarArticulo(cod); 
+                system("pause");
+            }
+            else
+            {
+                system("cls");
+                cout<<"Codigo no Existente"<<endl;
+                system("pause");
+            }
+        break;
+    
+        case 2: //por proveedor
+            system("cls");
+            cout<<"Ingrese codigo de proveedor: ";
+            cin>>codP;
+            cout<<endl;
+            system("cls");
+            for(int x = 1; x <= 100; x++)
+            {
+                if(articulos[x].codProveedor == codP)
+                {
+                    mostrarArticulo(x);
+                    p += 1;
+                }
+            }
+            if (p == 0)
+            {
+                cout<<"Proveedor no existente"<<endl;
+            }
+            system("pause");
+        break;
+
+        case 3:
+            system("cls");
+            cout<<"Ingrese nombre a buscar: ";
+            cin>>nombre;
+            for(int x = 1; x <= 100; x++)
+            {
+                texto = articulos[x].nombre;
+                posicion = texto.find(nombre);
+
+                if(posicion != string::npos)
+                {
+                    mostrarArticulo(x);
+                }
+            }
+            system("pause");
+        break;
+
+        default:
+        break;
+    }
+}
+
+void trasladarArticulos()
+{
+    int cod, op, traslado;
+    system("cls");
+    cout<<"Ingrese el codigo del articulo a trasladar: ";
+    cin>>cod;
+    if(articulos[cod].activo == true)
+    {
+        system("cls");
+        cout<<"Informacion del Articulo: "<<endl<<endl;
+        mostrarArticulo(cod);
+        cout<<"1.) Trasladar de Tienda a Bodega"<<endl;
+        cout<<"2.) Trasladar de Bodega a tienda"<<endl;
+        cout<<"3.) Cancelar"<<endl;
+        cout<<"Seleccione una opcion: ";
+        cin>>op;
+        if(op == 1 && articulos[cod].cantidadTienda > 0) //Tienda a bodega
+        {
+            system("cls");
+            cout<<"Existen "<<articulos[cod].cantidadTienda<<" unidades de "<<articulos[cod].nombre<<" en tienda"<<endl;
+            cout<<"Cuantos Requiere trasladar a bodega?: ";
+            cin>>traslado;
+            if(traslado <= articulos[cod].cantidadTienda && traslado > 0)
+            {
+                system("cls");
+                articulos[cod].cantidadTienda -= traslado;
+                articulos[cod].cantidadBodega += traslado;
+                cout<<"Se trasladaron "<<traslado<<" unidades de "<<articulos[cod].nombre<<" a bodega"<<endl;
+                system("pause");
+            }
+            else
+            {
+                system("cls");
+                cout<<"Datos invalidos"<<endl;
+                system("pause");
+            }
+        }
+        else if(articulos[cod].cantidadTienda == 0)
+        {
+            system("cls");
+            cout<<"No existen Articulos en tienda"<<endl;
+            system("pause");
+        }
+        if(op == 2 && articulos[cod].cantidadBodega > 0) //bodega a tienda
+        {
+            system("cls");
+            cout<<"Existen "<<articulos[cod].cantidadBodega<<" unidades de "<<articulos[cod].nombre<<" en bodega"<<endl;
+            cout<<"Cuantos Requiere trasladar a tienda?: ";
+            cin>>traslado;
+            if(traslado <= articulos[cod].cantidadBodega && traslado > 0)
+            {
+                system("cls");
+                articulos[cod].cantidadTienda += traslado;
+                articulos[cod].cantidadBodega -= traslado;
+                cout<<"Se trasladaron "<<traslado<<" unidades de "<<articulos[cod].nombre<<" a tienda"<<endl;
+                system("pause");
+            }
+            else
+            {
+                system("cls");
+                cout<<"Datos invalidos"<<endl;
+                system("pause");
+            }
+        }
+        else if(articulos[cod].cantidadBodega == 0)
+        {
+            system("cls");
+            cout<<"No existen Articulos en bodega"<<endl;
+            system("pause");
+        }
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
+
+// Metodos de Clientes
+void mostrarCliente(int cod)
+{
+    cout<<"Codigo de Cliente: "<<clientes[cod].codigo<<endl;
+    cout<<"Nombre de Cliente: "<<clientes[cod].nombre<<endl;
+    cout<<"Direccion de Cliente: "<<clientes[cod].direccion<<endl;
+    cout<<"Nit de Cliente: "<<clientes[cod].nit<<endl<<endl;
+}
+
+void ingresarClientes(int cod)
+{
+    if(clientes[cod].activo == false && cod <= 100 && cod > 0) //queda mejor con un if
+    {
+        clientes[cod].activo = true;
+        clientes[cod].codigo = cod;
+        cout<<"Ingrese Nombre del Cliente: ";
+        fflush(stdin); //Sepa, pero sin esta linea no funciona el cin.getline xd
+        cin.getline(clientes[cod].nombre, 100);
+        cout<<"Ingrese la Direccion: ";
+        cin>>clientes[cod].direccion;
+        cout<<"Ingrese el Nit: ";
+        cin>>clientes[cod].nit;
+        system("cls");
+        cout<<"Este es el cliente: "<<endl<<endl;
+        mostrarCliente(cod);
+        system("pause");
+    }
+    else if(cod > 100 or cod == 0)
+    {
+        system("cls");
+        cout<<"Codigo Incorrecto, esta fuera de rango."<<endl;
+        system("pause");
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo ya Existente, ingrese uno diferente."<<endl;
+        system("pause");
+    }
+}
+
+void modificarClientes()
+{
+    int cod;
+    system("cls");
+    cout<<"Ingrese el codigo del cliente que desea modificar: ";
+    cin>>cod;
+    if(clientes[cod].activo == true)
+    { 
+        cout<<"Estos son los datos actuales del cliente: "<<endl<<endl;
+        mostrarCliente(cod);
+        system("pause");
+        //system("cls");
+        clientes[cod].activo = false;
+        ingresarClientes(cod);
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
+
+void buscarClientes()
+{
+    int op, cod, codP, p = 0;
+
+    //Para opcion de busqueda;
+    string texto, nombre;
+    size_t posicion;
+
+    system("cls");
+    cout<<"Buscar Clientes"<<endl;
+    cout<<"1.) Por Codigo de Cliente"<<endl;
+    cout<<"2.) Por NIT de Cliente"<<endl;
+    cout<<"3.) Por Nombre de Cliente"<<endl;
+    cout<<"4.) Por Direccion de Cliente"<<endl;
+    cout<<"5.) Cancelar"<<endl<<endl;
+    cout<<"Seleccione una opcion de busqueda: ";
+    cin>>op;
+    switch (op)
+    {
+        case 1: //por codigo
+            system("cls");
+            cout<<"Ingrese codigo de Cliente: ";
+            cin>>cod;
+            cout<<endl;
+            if(clientes[cod].activo == true)
+            {
+                mostrarCliente(cod); 
+                system("pause");
+            }
+            else
+            {
+                system("cls");
+                cout<<"Codigo no Existente"<<endl;
+                system("pause");
+            }
+        break;
+    
+        case 2: //por proveedor
+            system("cls");
+            cout<<"Ingrese NIT de Cliente: ";
+            cin>>codP;
+            cout<<endl;
+            system("cls");
+            for(int x = 1; x <= 100; x++)
+            {
+                if(clientes[x].nit == codP)
+                {
+                    mostrarCliente(x);
+                    p += 1;
+                }
+            }
+            if (p == 0)
+            {
+                cout<<"NIT no existente"<<endl;
+            }
+            system("pause");
+        break;
+
+        case 3:
+            system("cls");
+            cout<<"Ingrese nombre a buscar: ";
+            cin>>nombre;
+            for(int x = 1; x <= 100; x++)
+            {
+                texto = clientes[x].nombre;
+                posicion = texto.find(nombre);
+
+                if(posicion != string::npos)
+                {
+                    system("cls");
+                    cout<<"Datos Encontrados: "<<endl;
+                    mostrarCliente(x);
+                }
+            }
+            system("pause");
+        break;
+
+        case 4:
+            system("cls");
+            cout<<"Ingrese Direccion a buscar: ";
+            cin>>nombre;
+            for(int x = 1; x <= 100; x++)
+            {
+                texto = clientes[x].direccion;
+                posicion = texto.find(nombre);
+
+                if(posicion != string::npos)
+                {
+                    system("cls");
+                    cout<<"Datos Encontrados: "<<endl;
+                    mostrarCliente(x);
+                }
+            }
+            system("pause");
+        break;
+
+        default:
+        break;
+    }
+}
+
+void eliminarClientes()
+{
+    int cod, op;
+    system("cls");
+    cout<<"Ingrese el codigo del Cliente que desea eliminar: ";
+    cin>>cod;
+    if(clientes[cod].activo == true)
+    { 
+        cout<<"Estos son los datos actuales del Cliente: "<<endl<<endl;
+        mostrarCliente(cod);
+        cout<<endl<<"Esta seguro de eliminar este Cliente? (1 = si, 2 = no): ";
+        cin>>op;
+        if(op == 1)
+        {
+            clientes[cod].activo = false;
+            system("cls");
+            cout<<"Cliente Eliminado Exitosamente"<<endl;
+            system("pause");
+        }
+    }
+    else
+    {
+        system("cls");
+        cout<<"Codigo no Existente"<<endl;
+        system("pause");
+    }
+}
+
+void verClientes()
+{
+    system("cls");
+    for(int x = 1; x <= 100; x++)
+    {
+        if(clientes[x].activo == true)
+        {
+            mostrarCliente(x);
+        }
+    }
+    system("pause");
+}
+
 //Metodos de Empleados
 int generarCodEmpleado(int cod) //Esta funcion recibiara el codigo del empleado y devolvera su valor en el array
 {
@@ -1002,6 +1102,7 @@ int arrayEmpleados() //Esta funcion devolvera el numero del array mas cercano qu
         }
     }
 }
+
 void mostrarEmpleados(int cod)
 {
     cout<<"Codigo de Empleados: "<<empleados[cod].codigo<<endl;
@@ -1013,7 +1114,7 @@ void ingresarEmpleados(int codd)
 {
 	int cod;
 	cod = arrayEmpleados();
-    if(empleados[cod].activo == false) //queda mejor con un if
+    if(empleados[cod].activo == false && codd < 100 && codd > 0) //queda mejor con un if
     {
         empleados[cod].activo = true;
         empleados[cod].codigo = codd;
@@ -1021,10 +1122,17 @@ void ingresarEmpleados(int codd)
         fflush(stdin); //Sepa, pero sin esta linea no funciona el cin.getline xd
         cin.getline(empleados[cod].nombre, 100);
         cout<<"Ingrese el Puesto del Empleado: ";
-        cin>>empleados[cod].puesto;
+        fflush(stdin); //Sepa, pero sin esta linea no funciona el cin.getline xd
+        cin.getline(empleados[cod].puesto, 100);
         system("cls");
         cout<<"Este es el Empleado: "<<endl<<endl;
         mostrarEmpleados(cod);
+        system("pause");
+    }
+    else if(codd > 100 or codd == 0)
+    {
+        system("cls");
+        cout<<"Codigo Incorrecto, esta fuera de rango."<<endl;
         system("pause");
     }
     else
@@ -1145,141 +1253,486 @@ void eliminarEmpleados()
     }
 }
 
-void verEmpleados()
-{
-    system("cls");
-    for(int x = 1; x <= 100; x++)
-    {
-        if(empleados[x].activo == true)
-        {
-            mostrarEmpleados(x);
-        }
-    }
-    system("pause");
-}
-
 //6. REPORTES
 void reporteArtBodega(){
 	system("cls");
-	gotoxy(40,0); cout<<"REPORTE DE ARTICULOS EN BODEGA";
-	gotoxy(5,2); cout<<"DESCRIPCION";
-	gotoxy(40, 2); cout<<"CANTIDAD EN BODEGA";
-	gotoxy(50,2); cout<<"PRECIO UNITARIO";
-	gotoxy(100,2); cout<<"PRECIO TOTAL";
-	
-	for (int x=0; x <101; x++){
-		if (articulos[x].cantidadBodega > 0){
-			int y= 3;
-			for (int i = 0; i< x; i++){
-			gotoxy(5, y); cout<<articulos[i].nombre;
-			gotoxy(25, y); cout<<articulos[i].cantidadBodega;
-			gotoxy(50, y); cout<<"Q. "<<articulos[i].precio;
-			gotoxy(100, y); cout<<"Q. "<<articulos[i].precio * articulos[i].cantidadBodega;
-			y++;
-			}
-		}
-	
-	}
-	getch();
+    int y = 4, codP;
+	gotoxy(60,0); cout<<"REPORTE DE ARTICULOS EN BODEGA";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"DESCRIPCION";
+    gotoxy(50,2); cout<<"PRECIO UNITARIO";
+    gotoxy(70, 2); cout<<"CANT. BODEGA";
+    gotoxy(90,2); cout<<"COD. PROV";
+    gotoxy(110,2); cout<<"NOMBRE DE PROVEEDOR";
+    for(int x = 1; x <= 100; x++)
+    {
+        if(articulos[x].activo == true && articulos[x].cantidadBodega > 0)
+        {
+            codP = generarCodProv(articulos[x].codProveedor);
+            gotoxy(5, y); cout<<articulos[x].codigo;
+            gotoxy(15, y); cout<<articulos[x].nombre;
+            gotoxy(50, y); cout<<"Q. "<<articulos[x].precio;
+            gotoxy(70, y); cout<<articulos[x].cantidadBodega;
+            gotoxy(90, y); cout<<"("<<articulos[x].codProveedor<<") ";
+			gotoxy(110, y); cout<<proveedores[codP].nombre;
+            y+=1;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
 }
 
 void reporteArtTienda(){
 	system("cls");
-	gotoxy(40,0); cout<<"REPORTE DE ARTICULOS EN TIENDA";
-	gotoxy(5,2); cout<<"DESCRIPCION";
-	gotoxy(40, 2); cout<<"CANTIDAD EN TIENDA";
-	gotoxy(50,2); cout<<"PRECIO UNITARIO";
-	gotoxy(100,2); cout<<"PRECIO TOTAL";
-	
-	for (int x=0; x <101; x++){
-		if (articulos[x].cantidadTienda > 0){
-			int y= 3;
-			for (int i = 0; i< x; i++){
-			gotoxy(5, y); cout<<articulos[i].nombre;
-			gotoxy(25, y); cout<<articulos[i].cantidadTienda;
-			gotoxy(50, y); cout<<"Q. "<<articulos[i].precio;
-			gotoxy(100, y); cout<<"Q. "<<articulos[i].precio * articulos[i].cantidadTienda;
-			y++;
-			}
-		}
-	
-	}
-	getch();
+    int y = 4, codP;
+	gotoxy(60,0); cout<<"REPORTE DE ARTICULOS EN TIENDA";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"DESCRIPCION";
+    gotoxy(50,2); cout<<"PRECIO UNITARIO";
+    gotoxy(70, 2); cout<<"CANT. TIENDA";
+    gotoxy(90,2); cout<<"COD. PROV";
+    gotoxy(110,2); cout<<"NOMBRE DE PROVEEDOR";
+    for(int x = 1; x <= 100; x++)
+    {
+        if(articulos[x].activo == true && articulos[x].cantidadTienda > 0)
+        {
+            codP = generarCodProv(articulos[x].codProveedor);
+            gotoxy(5, y); cout<<articulos[x].codigo;
+            gotoxy(15, y); cout<<articulos[x].nombre;
+            gotoxy(50, y); cout<<"Q. "<<articulos[x].precio;
+            gotoxy(70, y); cout<<articulos[x].cantidadTienda;
+            gotoxy(90, y); cout<<"("<<articulos[x].codProveedor<<") ";
+			gotoxy(110, y); cout<<proveedores[codP].nombre;
+            y+=1;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
 }
+
 void reporteClientes(){
 	system("cls");
-	gotoxy(40,0); cout<<"REPORTE DE ARTICULOS DE CLIENTES";
-	gotoxy(5,2); cout<<"NOMBRE";
-	gotoxy(40, 2); cout<<"DIRECCION";
-	gotoxy(50,2); cout<<"NIT";
-	gotoxy(100,2); cout<<"CODIGO";
-	
-	for (int x=0; x <101; x++){
-		if (clientes[x].codigo > 0){
-			int y= 3;
-			for (int i = 0; i< x; i++){
-			gotoxy(5, y); cout<<clientes[i].nombre;
-			gotoxy(25, y); cout<<clientes[i].direccion;
-			gotoxy(50, y); cout<<clientes[i].nit;
-			gotoxy(100, y); cout<<clientes[i].codigo;
-			y++;
-			}
-		}
-	
-	}
-	getch();
+    int y = 4;
+	gotoxy(30,0); cout<<"LISTADO DE CLIENTES";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"NOMBRE";
+    gotoxy(50,2); cout<<"DIRECCION";
+    gotoxy(70, 2); cout<<"NIT";
+    for(int x = 1; x <= 100; x++)
+    {
+        if(clientes[x].activo == true)
+        {
+            gotoxy(5, y); cout<<clientes[x].codigo;
+            gotoxy(15, y); cout<<clientes[x].nombre;
+            gotoxy(50, y); cout<<clientes[x].direccion;
+            gotoxy(70, y); cout<<clientes[x].nit;
+            y+=1;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
 }
 
 void reporteProveedores(){
 	system("cls");
-	gotoxy(40,0); cout<<"REPORTE DE ARTICULOS DE PROVEEDORES";
-	gotoxy(5,2); cout<<"NOMBRE";
-	gotoxy(40, 2); cout<<"DIRECCION";
-	gotoxy(50,2); cout<<"NIT";
-	gotoxy(100,2); cout<<"CODIGO";
-	
-	for (int x=00; x <100; x++){
-		if (proveedores[x].codigo > 0){
-			int y= 3;
-			for (int i = 0; i< x; i++){
-			gotoxy(5, y); cout<<proveedores[i].nombre;
-			gotoxy(25, y); cout<<proveedores[i].direccion;
-			gotoxy(50, y); cout<<proveedores[i].nit;
-			gotoxy(100, y); cout<<proveedores[i].codigo;
-			y++;
-			}
-		}
-	
-	}
-	getch();
+    int y = 4, codP;
+	gotoxy(35,0); cout<<"REPORTE DE PROVEEDORES";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"NOMBRE";
+    gotoxy(50,2); cout<<"DIRECCION";
+    gotoxy(70, 2); cout<<"TELEFONO";
+    gotoxy(90,2); cout<<"NIT";
+    for(int x = 1; x <= 100; x++)
+    {
+        if(proveedores[x].activo == true)
+        {
+            codP = generarCodProv(proveedores[x].codigo);
+            gotoxy(5, y); cout<<proveedores[x].codigo;
+            gotoxy(15, y); cout<<proveedores[codP].nombre;
+            gotoxy(50, y); cout<<proveedores[x].direccion;
+            gotoxy(70, y); cout<<proveedores[x].telefono;
+            gotoxy(90, y); cout<<proveedores[x].nit;
+            y+=1;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
 }
 
 void reporteEmpleados(){
 	system("cls");
-	gotoxy(40,0); cout<<"REPORTE DE EMPLEADOS";
-	gotoxy(5,2); cout<<"NOMBRE";
-	gotoxy(40, 2); cout<<"DIRECCION";
-	gotoxy(50,2); cout<<"NIT";
-	gotoxy(100,2); cout<<"CODIGO";
-	
-	for (int x=0; x <101; x++){
-		if (empleados[x].codigo > 0){
-			int y= 3;
-			for (int i = 0; i< x; i++){
-			gotoxy(5, y); cout<<empleados[i].nombre;
-			gotoxy(45, y); cout<<empleados[i].puesto;
-			gotoxy(60, y); cout<<empleados[i].codigo;
-			y++;
-			}
-		}
-	
-	}
-	getch();
+    int y = 4;
+	gotoxy(18,0); cout<<"REPORTE DE EMPLEADOS";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"NOMBRE";
+    gotoxy(40,2); cout<<"PUESTO";
+    for(int x = 1; x <= 100; x++)
+    {
+        if(empleados[x].activo == true)
+        {
+            gotoxy(5, y); cout<<empleados[x].codigo;
+            gotoxy(15, y); cout<<empleados[x].nombre;
+            gotoxy(40, y); cout<<empleados[x].puesto;
+            y+=1;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
+}
+
+void reporteFacturas(){
+	system("cls");
+    int y = 4, codP;
+	gotoxy(48,0); cout<<"REPORTE DE FACTURAS";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"CLIENTE";
+    gotoxy(45,2); cout<<"NIT";
+    gotoxy(60,2); cout<<"EMPLEADO";
+    gotoxy(90, 2); cout<<"CAJA";
+    gotoxy(110,2); cout<<"TOTAL";
+    for(int x = 1; x <= 100; x++)
+    {
+        if(factura[x].activo == true)
+        {
+            gotoxy(5, y); cout<<factura[x].codigo;
+            gotoxy(15, y); cout<<clientes[factura[x].codCliente].nombre;
+            gotoxy(45, y); cout<<clientes[factura[x].codCliente].nit;
+            gotoxy(60, y); cout<<empleados[factura[x].codEmpleado].nombre;
+            gotoxy(90, y); cout<<factura[x].caja;
+            gotoxy(110, y); cout<<"Q. "<<factura[x].total;
+            y+=1;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
+}
+
+void articulosMasVendidos()
+{
+    system("cls");
+    double datos[100], codigo;
+    int orden[100], cod;
+    for(int x = 1; x <= 100; x++)
+    {
+        if(articulos[x].activo == true)
+        {
+            datos[x] = articulos[x].numVentas + (articulos[x].codigo * 0.0001);
+        }
+        else
+        {
+            datos[x] = 0;
+        }
+    }
+    sort(datos, datos + 100);
+    system("cls");
+    int y = 4, codP, cont=1;
+	gotoxy(70,0); cout<<"TOP 10 ARTICULOS MAS VENDIDOS";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"DESCRIPCION";
+    gotoxy(50,2); cout<<"PRECIO UNITARIO";
+	gotoxy(70, 2); cout<<"CANT. TIENDA";
+    gotoxy(90, 2); cout<<"CANT. BODEGA";
+    gotoxy(110,2); cout<<"COD. PROV";
+    gotoxy(125,2); cout<<"NOMBRE DE PROVEEDOR";
+    gotoxy(150,2); cout<<"NUM. VENTAS";
+    for (int i = 100; i > 0; i--)
+    {
+        if(datos[i] > 0 && cont <=10)
+        {
+            orden[i] = (int) datos[i];
+            codigo = (datos[i] - orden[i]) * 10000;
+            cod = decimal(codigo);
+            
+            codP = generarCodProv(articulos[cod].codProveedor);
+            gotoxy(5, y); cout<<articulos[cod].codigo;
+            gotoxy(15, y); cout<<articulos[cod].nombre;
+            gotoxy(50, y); cout<<"Q. "<<articulos[cod].precio;
+			gotoxy(70, y); cout<<articulos[cod].cantidadTienda;
+            gotoxy(90, y); cout<<articulos[cod].cantidadBodega;
+            gotoxy(110, y); cout<<"("<<articulos[cod].codProveedor<<") ";
+			gotoxy(125, y); cout<<proveedores[codP].nombre;
+            gotoxy(150, y); cout<<articulos[cod].numVentas;
+            y+=1;
+            cont++;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
+}
+
+//3.Facturacion
+int generarArrayNit(int cod) //Esta funcion recibiara el nit del cliente y devolvera su valor en el array
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(clientes[x].nit == cod)
+        {
+            return x;
+            break;
+        }
+    }
+}
+
+int generarCodFactura() //Esta funcion genera un numero aleatorio en el array mas proximo y retorna su pocicion.
+{
+    int aleatorio, DESDE=10000, HASTA=999999;
+    for(int x = 1; x <= 100; x++)
+    {
+        if(factura[x].activo == false)
+        {
+            srand(time(NULL));
+            aleatorio = rand()%(HASTA-DESDE+1)+DESDE;
+            factura[x].codigo = aleatorio;
+            factura[x].activo = true;
+            return x;
+            break;
+        }
+        else if (x == 100)
+        {
+            return 0;
+            break;
+        }
+    }
+}
+
+void eliminarFactura(int cod) //Recibe el codigo de la factura, la elimina y reintegra los articulos a tienda
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(factura[cod].prodActivo[x] == true && factura[cod].cantProductos[x] > 0)
+        {
+            articulos[x].cantidadTienda += factura[cod].cantProductos[x];
+            factura[cod].cantProductos[x] = 0;
+        }
+    }
+    factura[cod].activo = false;
+}
+
+double totalFactura(int cod)
+{
+    double total = 0;
+    for(int x = 1; x <= 100; x++)
+    {
+        if(factura[cod].prodActivo[x] == true)
+        {
+            total += (articulos[x].precio * factura[cod].cantProductos[x]);
+        }
+    }
+    return total;
+}
+
+void verFactura(int cod)
+{
+    int y = 10;
+	gotoxy(37,8); cout<<"DESCRIPCION DE LA FACTURA";
+    gotoxy(5,9); cout<<"CODIGO";
+	gotoxy(15,9); cout<<"DESCRIPCION";
+    gotoxy(50,9); cout<<"PRECIO UNITARIO";
+	gotoxy(70,9); cout<<"CANTIDAD";
+    gotoxy(85,9); cout<<"SUBTOTAL";
+    if(factura[cod].activo == true)
+    {
+        for(int z = 1; z <=100; z++)
+        {
+            if(factura[cod].prodActivo[z] == true)
+            {
+                gotoxy(5, y); cout<<factura[cod].codProductos[z];
+                gotoxy(15, y); cout<<articulos[z].nombre;
+                gotoxy(50, y); cout<<"Q. "<<articulos[z].precio;
+                gotoxy(70, y); cout<<factura[cod].cantProductos[z];
+                gotoxy(85, y); cout<<"Q. "<<articulos[z].precio * factura[cod].cantProductos[z];
+                y+=1;
+            }
+        }
+        gotoxy(78, y+1); cout<<"TOTAL: Q. "<<totalFactura(cod);
+    }
+}
+
+bool existeNit(int nit)
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(clientes[x].nit == nit)
+        {
+            return true;
+            break;
+        }
+        else if (x == 100)
+        {
+            return false;
+        }
+    }
+}
+
+int genCodEmpleado() //Esta funcion retorna aleatoriamente el codigo de empleado que atendera.
+{
+    int aleatorio, DESDE=1, HASTA=0;
+    int codEmpleados[100];
+    for(int x = 1; x <= 100; x++)
+    {
+        if(empleados[x].activo == true)
+        {
+            codEmpleados[HASTA] = empleados[x].codigo;
+            HASTA += 1;
+        }
+    }
+    srand(time(NULL));
+    aleatorio = rand()%(HASTA-DESDE+1)+DESDE;
+    return codEmpleados[aleatorio];
+}
+
+void facturacion()
+{
+    int nit, op, cod, nitGen, opFac;
+    int fac, codF, cant, x = 1, codEmp;
+    bool c = true, facturar = true;
+    system("cls");
+    cout<<"BIENVENIDO AL SISTEMA DE FACTURACION"<<endl<<endl;
+    cout<<"Ingrese su nit: ";
+    cin>>nit;
+    while(c == true)
+    {
+        if(existeNit(nit) == true) //nit validado
+        {
+            nitGen = generarArrayNit(nit); //array del nit
+            fac = generarCodFactura(); //codigo de factura
+            factura[fac].codCliente = clientes[nitGen].codigo; //Guardar informacion del cliente en la factura.
+            while(facturar == true)
+            {
+                system("cls");
+                cout<<"BIENVENIDO AL SISTEMA DE FACTURACION"<<endl<<endl;
+                cout<<"SUPERTIENDA MAS+"<<endl;
+                cout<<"Nombre: "<<clientes[nitGen].nombre<<endl;
+                cout<<"Direccion: "<<clientes[nitGen].direccion<<endl;
+                cout<<"NIT: "<<clientes[nitGen].nit<<endl;
+                cout<<"Numero de Factura: "<<factura[fac].codigo<<endl;
+                verFactura(fac);
+                cout<<endl<<endl;
+                cout<<"Ingrese codigo de producto a agregar (0 = Finalizar): ";
+                cin>>codF;
+                if(articulos[codF].activo == true && codF > 0)
+                {
+                    cout<<"Su articulo seleccionado es: "<<articulos[codF].nombre<<endl;
+                    cout<<"Ingrese la cantidad que desea: ";
+                    cin>>cant;
+                    if(cant > 0 && articulos[codF].cantidadTienda >= cant)
+                    {
+                        factura[fac].codProductos[codF] = codF;
+                        factura[fac].prodActivo[codF] = true;
+                        if(factura[fac].cantProductos[codF] == 0) //si la cantidad de productos en la factura es igual a 0, la cantidad ingresada es igual a la cantidad de productos
+                        {
+                            factura[fac].cantProductos[codF] = cant;
+                        }
+                        else if(factura[fac].cantProductos[codF] > 0) //si la cantidad de productos de la factura es mayor a 0, la cantidad ingresada se suma a la cantidad de productos
+                        {
+                            factura[fac].cantProductos[codF] += cant;
+                        }
+                        articulos[codF].cantidadTienda -= cant; //Restar de tienda
+                    }
+                    else if (articulos[codF].cantidadTienda < cant)
+                    {
+                        cout<<endl<<"No existen suficientes productos en tienda, realize peticion a bodega"<<endl;
+                        cout<<"Cantidad de "<<articulos[codF].nombre<<" en tienda: "<<articulos[codF].cantidadTienda<<endl;
+                        system("pause");
+                    }
+                    else
+                    {
+                        cout<<"Datos Invalidos"<<endl;
+                        system("pause");
+                    }
+                }
+                else if(articulos[codF].activo == false && codF > 0)
+                {
+                    cout<<"Producto no existente"<<endl;
+                    system("pause");
+                }
+                else if(codF == 0)
+                {
+                    system("cls");
+                    gotoxy(40, 2); cout<<"SUPERTIENDA MAS+"<<endl;
+                    gotoxy(38, 3); cout<<"Nombre: "<<clientes[nitGen].nombre<<endl;
+                    gotoxy(38, 4); cout<<"Direccion: "<<clientes[nitGen].direccion<<endl;
+                    gotoxy(42, 5); cout<<"NIT: "<<clientes[nitGen].nit<<endl;
+                    gotoxy(36, 6); cout<<"Numero de Factura: "<<factura[fac].codigo<<endl;
+                    verFactura(fac);
+                    cout<<endl;
+                    codEmp = genCodEmpleado();
+                    factura[fac].caja = numeroAleatorio(1,10);
+                    cout<<"Le atendio: "<<empleados[codEmp].nombre<<endl;
+                    cout<<"Puesto: "<<empleados[codEmp].puesto<<endl;
+                    cout<<"Caja #"<<factura[fac].caja<<endl;
+                    cout<<endl<<"Seleccione una opcion: (0=Confirmar Factura) (1=Cancelar): ";
+                    cin>>opFac;
+                    if(opFac == 0)
+                    {
+                        system("cls");
+                        factura[fac].total = totalFactura(fac);
+                        factura[fac].codEmpleado = empleados[codEmp].codigo;
+                        for(int x = 1; x <= 100; x++)//Para que cuente las ventas
+                        {
+                            if(factura[fac].cantProductos[x] > 0)
+                            {
+                                articulos[x].numVentas += factura[fac].cantProductos[x];
+                            }
+                        }
+                        cout<<"Factura Guardada Exitosamente"<<endl;
+                    }
+                    else
+                    {
+                        system("cls");
+                        eliminarFactura(fac);
+                        cout<<"Factura Cancelada"<<endl;
+                    }
+                    facturar = false;
+                    c = false;
+                    system("pause");
+                }
+            }
+        }
+        else
+        {
+            system("cls");
+            cout<<"No existe ningun cliente registrado con ese nit, Desea crear un nuevo usuario? (1 = Si, 2 = No): ";
+            cin>>op;
+            switch (op)
+            {
+                case 1:
+                    system("cls");
+                    cout<<"Ingresar Clientes"<<endl;
+                    cout<<"Ingrese Codigo (1-100): ";
+                    cin>>cod;
+                    ingresarClientes(cod);
+                break;
+
+                case 2:
+                    c = false;
+                break;
+            
+                default:
+                break;
+            }
+        }
+    }
+}
+
+int buscarFactura(int fac)
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(factura[x].codigo == fac)
+        {
+            return x;
+        }
+        else if(x == 100)
+        {
+            return 0;
+        }
+    }
 }
 
 main()
 {
-    int opcion, op1, cod;
+    int opcion, op1, cod, fact;
     bool repeticion = true;
     generarDatos();
     while(repeticion == true)
@@ -1389,7 +1842,7 @@ main()
                     break;
 
                     case 5:
-                        verClientes();
+                        reporteClientes();
                     break;
 
                     case 6:
@@ -1403,7 +1856,48 @@ main()
 
             //Facturacion
             case 3:
-                //Llamar funcion facturacion()
+                system("cls");
+                cout<<"SUPERTIENDA MAS+"<<endl<<endl;
+                cout<<"Facturacion"<<endl;
+                cout<<"1.) Facturar"<<endl;
+                cout<<"2.) Eliminar Facturas"<<endl;
+                cout<<"3.) Ver todo"<<endl;
+                cout<<"4.) Regresar"<<endl<<endl;
+                cout<<"Seleccione una opcion: ";
+                cin>>op1;
+                switch (op1)
+                {
+                    case 1:
+                        facturacion();
+                    break;
+
+                    case 2:
+                        reporteFacturas();
+                        cout<<endl<<"Ingrese el codigo de la factura que desea eliminar: ";
+                        cin>>fact;
+                        if(buscarFactura(fact) != 0)
+                        {
+                            eliminarFactura(buscarFactura(fact));
+                            cout<<"Factura Eliminada"<<endl;
+                            system("pause");
+                        }
+                        else{
+                            cout<<"Factura no encontrada"<<endl;
+                            system("pause");
+                        }
+                    break;
+
+                    case 3:
+                        reporteFacturas();
+                    break;
+
+                    case 4:
+                    /* code */
+                    break;
+                
+                    default:
+                    break;
+                }
             break;
 
             //Proveedores
@@ -1443,7 +1937,7 @@ main()
                     break;
 
                     case 5:
-                        verProv();
+                        reporteProveedores();
                     break;
 
                     case 6:
@@ -1465,7 +1959,7 @@ main()
                 cout<<"3.) Buscar"<<endl;
                 cout<<"4.) Eliminar"<<endl;
                 cout<<"5.) Ver Todo"<<endl;
-                cout<<"5.) Regresar"<<endl<<endl;
+                cout<<"6.) Regresar"<<endl<<endl;
                 cout<<"Seleccione una opcion: ";
                 cin>>op1;
                 switch (op1)
@@ -1492,7 +1986,7 @@ main()
                     break;
 
                     case 5:
-                        verEmpleados();
+                        reporteEmpleados();
                     break;
 
                     case 6:
@@ -1522,9 +2016,11 @@ main()
                 switch (op1)
                 {
                     case 1:
+                        reporteFacturas();
                     break;
 					
                     case 2:
+                        articulosMasVendidos();
                     break;
 					
 					//articulos en bodega
