@@ -5,6 +5,8 @@
 #include<string>
 #include<conio.h>
 #include<ctime>
+#include<stdio.h>
+#include<time.h>
 
 using namespace std;
 
@@ -59,17 +61,25 @@ struct emp //empleados
 struct codFac
 {
     int codigo = 0;
+    int codCliente;
+    int codEmpleado;
+    int caja;
     bool activo = false;
     bool prodActivo[100];
-    char nombre[100];
-    char direccion[100];
-    char empleado[100];
-    char puesto[100];
     int codProductos[100];
     int cantProductos[100];
     double total;
 
 }factura[100];
+
+int numeroAleatorio(int a, int b)
+{
+    int aleatorio, DESDE=a, HASTA=b;
+    
+    srand(time(NULL));
+    aleatorio = rand()%(HASTA-DESDE+1)+DESDE;
+    return aleatorio;
+}
 
 void gotoxy(int x,int y){  
 	HANDLE hcon;  
@@ -1356,6 +1366,35 @@ void reporteEmpleados(){
     system("pause");
 }
 
+void reporteFacturas(){
+	system("cls");
+    int y = 4, codP;
+	gotoxy(48,0); cout<<"REPORTE DE FACTURAS";
+    gotoxy(5,2); cout<<"CODIGO";
+	gotoxy(15,2); cout<<"CLIENTE";
+    gotoxy(40,2); cout<<"NIT";
+    gotoxy(70,2); cout<<"EMPLEADO";
+    gotoxy(90, 2); cout<<"CAJA";
+    gotoxy(110,2); cout<<"TOTAL";
+    for(int x = 1; x <= 100; x++)
+    {
+        if(factura[x].activo == true)
+        {
+            gotoxy(5, y); cout<<factura[x].codigo;
+            gotoxy(15, y); cout<<clientes[factura[x].codCliente].nombre;
+            gotoxy(40, y); cout<<clientes[factura[x].codCliente].nit;
+            gotoxy(70, y); cout<<empleados[factura[x].codEmpleado].nombre;
+            gotoxy(90, y); cout<<factura[x].caja;
+            gotoxy(110, y); cout<<"Q. "<<factura[x].total;
+            y+=1;
+        }
+    }
+    cout<<endl<<endl;
+    system("pause");
+}
+
+
+//3.Facturacion
 int generarArrayNit(int cod) //Esta funcion recibiara el nit del cliente y devolvera su valor en el array
 {
     for(int x = 1; x <= 100; x++)
@@ -1388,6 +1427,19 @@ int generarCodFactura() //Esta funcion genera un numero aleatorio en el array ma
             break;
         }
     }
+}
+
+void eliminarFactura(int cod) //Recibe el codigo de la factura, la elimina y reintegra los articulos a tienda
+{
+    for(int x = 1; x <= 100; x++)
+    {
+        if(factura[cod].prodActivo[x] == true && factura[cod].cantProductos[x] > 0)
+        {
+            articulos[x].cantidadTienda += factura[cod].cantProductos[x];
+            factura[cod].cantProductos[x] = 0;
+        }
+    }
+    factura[cod].activo = false;
 }
 
 double totalFactura(int cod)
@@ -1446,10 +1498,27 @@ bool existeNit(int nit)
     }
 }
 
+int genCodEmpleado() //Esta funcion retorna aleatoriamente el codigo de empleado que atendera.
+{
+    int aleatorio, DESDE=1, HASTA=1;
+    int codEmpleados[100];
+    for(int x = 1; x <= 100; x++)
+    {
+        if(empleados[x].activo == true)
+        {
+            codEmpleados[HASTA] = empleados[x].codigo;
+            HASTA += 1;
+        }
+    }
+    srand(time(NULL));
+    aleatorio = rand()%(HASTA-DESDE+1)+DESDE;
+    return codEmpleados[aleatorio];
+}
+
 void facturacion()
 {
-    int nit, op, cod, nitGen;
-    int fac, codF, cant, x = 1;
+    int nit, op, cod, nitGen, opFac;
+    int fac, codF, cant, x = 1, codEmp;
     bool c = true, facturar = true;
     system("cls");
     cout<<"BIENVENIDO AL SISTEMA DE FACTURACION"<<endl<<endl;
@@ -1461,6 +1530,7 @@ void facturacion()
         {
             nitGen = generarArrayNit(nit); //array del nit
             fac = generarCodFactura(); //codigo de factura
+            factura[fac].codCliente = clientes[nitGen].codigo; //Guardar informacion del cliente en la factura.
             while(facturar == true)
             {
                 system("cls");
@@ -1520,6 +1590,26 @@ void facturacion()
                     gotoxy(36, 6); cout<<"Numero de Factura: "<<factura[fac].codigo<<endl;
                     verFactura(fac);
                     cout<<endl;
+                    codEmp = genCodEmpleado();
+                    factura[fac].caja = numeroAleatorio(1,10);
+                    cout<<"Le atendio: "<<empleados[codEmp].nombre<<endl;
+                    cout<<"Puesto: "<<empleados[codEmp].puesto<<endl;
+                    cout<<"Caja #"<<factura[fac].caja<<endl;
+                    cout<<endl<<"Seleccione una opcion: (0=Confirmar Factura) (1=Cancelar): ";
+                    cin>>opFac;
+                    if(opFac == 0)
+                    {
+                        system("cls");
+                        factura[fac].total = totalFactura(fac);
+                        factura[fac].codEmpleado = empleados[codEmp].codigo;
+                        cout<<"Factura Guardada Exitosamente"<<endl;
+                    }
+                    else
+                    {
+                        system("cls");
+                        eliminarFactura(fac);
+                        cout<<"Factura Cancelada"<<endl;
+                    }
                     facturar = false;
                     c = false;
                     system("pause");
@@ -1678,7 +1768,36 @@ main()
 
             //Facturacion
             case 3:
-                facturacion();
+                system("cls");
+                cout<<"SUPERTIENDA MAS+"<<endl<<endl;
+                cout<<"Facturacion"<<endl;
+                cout<<"1.) Facturar"<<endl;
+                cout<<"2.) Eliminar Facturas"<<endl;
+                cout<<"3.) Ver todo"<<endl;
+                cout<<"4.) Regresar"<<endl<<endl;
+                cout<<"Seleccione una opcion: ";
+                cin>>op1;
+                switch (op1)
+                {
+                    case 1:
+                        facturacion();
+                    break;
+
+                    case 2:
+                    /* code */
+                    break;
+
+                    case 3:
+                        reporteFacturas();
+                    break;
+
+                    case 4:
+                    /* code */
+                    break;
+                
+                    default:
+                    break;
+                }
             break;
 
             //Proveedores
