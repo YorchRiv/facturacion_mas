@@ -84,11 +84,11 @@ int numeroAleatorio(int a, int b)
     return aleatorio;
 }
 
-int decimal(double dVal)
+/*int decimal(double dVal)
 {
     int nVal = static_cast<int>(std::round(dVal));
     return nVal;
-}
+}*/
 
 void gotoxy(int x,int y){  
 	HANDLE hcon;  
@@ -1406,7 +1406,7 @@ void reporteFacturas(){
     cout<<endl<<endl;
     system("pause");
 }
-
+/*
 void articulosMasVendidos()
 {
     system("cls");
@@ -1459,7 +1459,7 @@ void articulosMasVendidos()
     cout<<endl<<endl;
     system("pause");
 }
-
+*/
 //3.Facturacion
 int generarArrayNit(int cod) //Esta funcion recibiara el nit del cliente y devolvera su valor en el array
 {
@@ -2020,7 +2020,7 @@ main()
                     break;
 					
                     case 2:
-                        articulosMasVendidos();
+                        //articulosMasVendidos();
                     break;
 					
 					//articulos en bodega
